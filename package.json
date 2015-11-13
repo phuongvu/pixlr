@@ -1,0 +1,34 @@
+{
+  "name": "pixlr",
+  "version": "1.0.0",
+  "description": "Pixlr lets people manipulate a 64x64 Led panel via a web app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Raspberry Pi 2",
+    "Physical Web",
+    "NodeJS",
+    "ReactJS",
+    "Websocket"
+  ],
+  "author": "Phuong Vu <me@phuong.vu>",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.0.5",
+    "cors": "^2.7.1",
+    "debug": "^2.2.0",
+    "express": "^4.13.3",
+    "lodash": "^3.10.1",
+    "mongoose": "^4.2.5",
+    "morgan": "^1.6.1",
+    "node-rpi-rgb-led-matrix": "git+https://8912db3ec6f68d80e6fe431ebb6024136a51c28a:x-oauth-basic@github.com/phuongvu/node-rpi-rgb-led-matrix.git",
+    "passport": "^0.3.2",
+    "passport-strategy": "^1.0.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0"
+  }
+}
+
