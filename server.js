@@ -1,11 +1,9 @@
-var 	express = require('express'),
-	eddystone = require('eddystone-beacon');
+var LedMatrix = require("node-rpi-rgb-led-matrix");
 
-var options = {
-        txPowerLevel: -22,
-        tlmCount: 2,
-        tlmPeriod: 10
-};
-var url = 'http://google.com';
-eddystone.advertiseUrl(url);
-
+var matrix = new LedMatrix(32, 4, 1, 100, true);
+while(1) {
+  matrix.setPixel(63, 63, 250, 200, 50);
+  matrix.setPixel(0, 0, 0, 255, 100);
+  matrix.setPixel(0, 63, 255, 255, 255);
+  matrix.setPixel(63, 0, 255, 0, 0);
+}
