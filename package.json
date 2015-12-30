@@ -26,7 +26,6 @@
     "lwip-promise": "^0.1.0",
     "mongoose": "^4.2.5",
     "morgan": "^1.6.1",
-    "node-rpi-rgb-led-matrix": "0.0.2",
     "node-rpi-rgb-led-matrix": "git+https://8912db3ec6f68d80e6fe431ebb6024136a51c28a:x-oauth-basic@github.com/phuongvu/node-rpi-rgb-led-matrix.git",
     "passport": "^0.3.2",
     "passport-strategy": "^1.0.0",
