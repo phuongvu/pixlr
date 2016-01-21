@@ -4,7 +4,10 @@
   "description": "Pixlr lets people manipulate a 64x64 Led panel via a web app",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "browserify -t [ babelify --presets [ react ] ] -t [ envify --NODE_ENV production  ] ./client/app.jsx --outfile ./public/js/app.js",
+    "build-stage": "browserify -t [ babelify --presets [ react ] ] -t [ envify --NODE_ENV development  ] ./client/app.jsx --outfile ./public/js/app.js",
+    "start": "node server.js",
+    "prepare": "git clone --recursive git@github.com:phuongvu/pixlr.git node_modules",
     "preinstall": "git submodule update --init"
   },
   "keywords": [
@@ -30,9 +33,19 @@
     "morgan": "^1.6.1",
     "passport": "^0.3.2",
     "passport-strategy": "^1.0.0",
+    "react": "^0.14.6",
+    "react-bootstrap": "^0.28.2",
+    "react-canvas": "^1.1.0",
+    "react-color": "^1.3.4",
+    "react-dom": "^0.14.6",
+    "simplex-noise": "^2.2.0",
     "socket.io": "^1.3.7"
   },
   "devDependencies": {
+    "babel-preset-react": "^6.3.13",
+    "babelify": "^7.2.0",
+    "browserify": "^13.0.0",
+    "envify": "^3.4.0",
     "gulp": "^3.9.0"
   }
 }
