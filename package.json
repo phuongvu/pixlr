@@ -49,6 +49,10 @@
     "browserify": "^13.0.0",
     "envify": "^3.4.0",
     "gulp": "^3.9.1",
+    "gulp-git": "^1.7.0",
+    "gulp-jshint": "^2.0.0",
+    "gulp-mocha": "^2.2.0",
+    "gulp-nodemon": "^2.0.6",
     "postcss": "^5.0.16"
   }
 }
