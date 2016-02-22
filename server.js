@@ -5,21 +5,22 @@ var express = require('express')
 	, server = require('http').createServer(app)
 	, mongoose = require('./lib/mongoose.js')
 	, io = require('socket.io')(server)
-	, fs = require('fs')
   , gm = require('gm').subClass({imageMagick: true})
   , LedMatrix = require('node-rpi-rgb-led-matrix')
   , debug = require('debug')('admin:app')
   , morgan = require('morgan')
   , path = require('path')
-  , eddystoneBeacon = require('eddystone-beacon');
+  , eddystoneBeacon = require('eddystone-beacon')
+  , r = require('rethinkdbdash')()
   ;
 
 var SimplexNoise = require('simplex-noise'),
     simplex = new SimplexNoise(Math.random);
 
 var port = process.env.PORT || 80;
-var matrix = new LedMatrix(32, 1, 1, 50, false);
-var url = 'http://phuong.vu/?M1X';
+var matrix = new LedMatrix(32, 1, 1, 100);
+// var url = 'http://phuong.vu/?M1X';
+var url = 'http://phuong.vu/';
 var options = {
   name: 'Beacon',    // set device name when advertising (Linux only)
   txPowerLevel: -100, // override TX Power Level, default value is -21,
@@ -36,29 +37,69 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(morgan('combined'));
 
+var d = new Date();
+
+io.on('connection', function(socket) {
+  // console.log('a user connected', socket);
+
+  socket.on('render', function(msg) {
+    console.log('message: ' + msg.status);
+  });
+
+  socket.on('draw', function(coord) {
+    var x = coord.x,
+        y = coord.y;
+    if(x < 64 && y < 64) {
+      var t = d.getSeconds();
+      var r = Math.floor(simplex.noise3D(x/8, y/8, t/16) * 255);
+      var g = Math.floor(simplex.noise3D(x/16, y/16, t/16) * 255);
+      var b = Math.floor(simplex.noise3D(x/32, y/32, t/16) * 255);
+
+      matrix.setPixel(coord.x, coord.y, r, g, b);
+      matrix.setPixel(coord.x, coord.y - 1, r, g, b);
+      matrix.setPixel(coord.x, coord.y + 1, r, g, b);
+      matrix.setPixel(coord.x + 1, coord.y, r, g, b);
+    }
+  });
+
+  socket.on('reset', function() {
+    matrix.clear();
+  });
+
+  socket.on('randomize', function() {
+    var t = d.getSeconds();
+
+    for (var x = 0; x < 64; x++) {
+      for (var y = 0; y < 64; y++) {
+        var r = Math.floor(simplex.noise3D(x/8, y/8, t/16) * 255);
+        var g = Math.floor(simplex.noise3D(x/8, y/16, t/16) * 255);
+        var b = Math.floor(simplex.noise3D(x/16, y/32, t/16) * 255);
+        matrix.setPixel(x, y, r, g, b);
+      }
+    }
+  });  
+
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+});
+
 server.listen(port, function () {
   debug('Server listening at port %d', port);
 });
 
-mongoose.connect().then(function() {
-  server.listen(process.env.PORT, function() {
-    debug('Express listening at %d', server.address().port);
-  });
-});
 
-var t = 0;
+r.db('test').table("posts").insert({
+    id: 1,
+    title: "Lorem ipsum",
+    content: "Dolor sit amet"
+}).run();
 
-setInterval(function() {
-  for (var x = 0; x < 32; x++) {
-    for (var y = 0; y < 32; y++) {
-      var r = Math.floor(simplex.noise3D(x/8, y/8, t/16) * 255);
-      var g = Math.floor(simplex.noise3D(x/16, y/16, t/16) * 255);
-      var b = Math.floor(simplex.noise3D(x/32, y/32, t/16) * 255);
-      matrix.setPixel(x, y, r, g, b);
-    }
-  }
-  t++;
-}, 10);
+// mongoose.connect().then(function() {
+//   server.listen(process.env.PORT, function() {
+//     debug('Express listening at %d', server.address().port);
+//   });
+// });
   
 
 
