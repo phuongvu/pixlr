@@ -7,8 +7,7 @@
     "build": "browserify -t [ babelify --presets [ react ] ] -t [ envify --NODE_ENV production  ] ./client/app.jsx --outfile ./public/js/app.js",
     "build-stage": "browserify -t [ babelify --presets [ react ] ] -t [ envify --NODE_ENV development  ] ./client/app.jsx --outfile ./public/js/app.js",
     "start": "node server.js",
-    "prepare": "git clone --recursive git@github.com:phuongvu/pixlr.git node_modules",
-    "preinstall": "git submodule update --init"
+    "prepare": "git clone --recursive git@github.com:phuongvu/pixlr.git node_modules"
   },
   "keywords": [
     "Raspberry Pi 2",
@@ -20,22 +19,24 @@
   "author": "Phuong Vu <me@phuong.vu>",
   "license": "ISC",
   "dependencies": {
+    "babel-loader": "^6.2.3",
     "bluebird": "^3.1.1",
     "body-parser": "^1.14.2",
     "cookie-parser": "^1.4.0",
     "debug": "^2.2.0",
     "eddystone-beacon": "^1.0.5",
     "express": "^4.13.3",
+    "extract-text-webpack-plugin": "^1.0.1",
     "gm": "^1.21.1",
     "lodash": "^3.10.1",
     "mongoose": "^4.2.5",
     "morgan": "^1.6.1",
-    "node-rpi-rgb-led-matrix": "git+https://github.com/phuongvu/node-rpi-rgb-led-matrix.git",
     "react": "^0.14.6",
     "react-bootstrap": "^0.28.2",
     "react-canvas": "^1.1.0",
     "react-color": "^1.3.4",
     "react-dom": "^0.14.6",
+    "react-fontawesome": "^0.3.3",
     "react-hammerjs": "^0.4.5",
     "react-tap-event-plugin": "^0.2.1",
     "redux": "^3.3.1",
@@ -44,15 +45,29 @@
     "socket.io": "^1.3.7"
   },
   "devDependencies": {
+    "babel-preset-es2015": "^6.5.0",
     "babel-preset-react": "^6.3.13",
     "babelify": "^7.2.0",
+    "brfs": "^1.4.3",
     "browserify": "^13.0.0",
+    "css-loader": "^0.23.1",
     "envify": "^3.4.0",
     "gulp": "^3.9.1",
     "gulp-git": "^1.7.0",
     "gulp-jshint": "^2.0.0",
     "gulp-mocha": "^2.2.0",
     "gulp-nodemon": "^2.0.6",
-    "postcss": "^5.0.16"
+    "html-webpack-plugin": "^2.9.0",
+    "node-sass": "^3.4.2",
+    "postcss": "^5.0.16",
+    "react-hot-loader": "^1.3.0",
+    "redux-devtools": "^3.1.1",
+    "sass-loader": "^3.1.2",
+    "style-loader": "^0.13.0",
+    "transform-loader": "^0.2.3",
+    "webpack": "^1.12.14",
+    "webpack-dev-middleware": "^1.5.1",
+    "webpack-dev-server": "^1.14.1",
+    "webpack-hot-middleware": "^2.7.1"
   }
 }

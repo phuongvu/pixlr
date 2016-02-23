@@ -14,10 +14,19 @@ var express = require('express')
   , r = require('rethinkdbdash')()
   ;
 
+const webpack = require('webpack')
+      , webpackMiddleware = require('webpack-dev-middleware')
+      , webpackHotMiddleware = require('webpack-hot-middleware')
+      , config = require('./webpack.config.js')
+      ;
+
+
+const isDeveloping = process.env.NODE_ENV !== 'production';
+const port = isDeveloping ? 3000 : process.env.PORT;
+
 var SimplexNoise = require('simplex-noise'),
     simplex = new SimplexNoise(Math.random);
 
-var port = process.env.PORT || 80;
 var matrix = new LedMatrix(32, 1, 1, 100);
 // var url = 'http://phuong.vu/?M1X';
 var url = 'http://phuong.vu/';
@@ -30,12 +39,35 @@ var options = {
 
 eddystoneBeacon.advertiseUrl(url, options);
 
-app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(morgan('combined'));
+if (isDeveloping) {
+  const compiler = webpack(config);
+  const middleware = webpackMiddleware(compiler, {
+    publicPath: config.output.publicPath,
+    contentBase: 'src',
+    stats: {
+      colors: true,
+      hash: false,
+      timings: true,
+      chunks: false,
+      chunkModules: false,
+      modules: false
+    }
+  });
+
+  app.use(middleware);
+  app.use(webpackHotMiddleware(compiler));
+  app.get('*', function response(req, res) {
+    res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'public/index.html')));
+    res.end();
+  });
+} else {
+  app.use(express.static(__dirname + '/public'));
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(cookieParser());
+  app.use(express.static(path.join(__dirname, 'public')));
+  app.use(morgan('combined'));
+}
 
 var d = new Date();
 
