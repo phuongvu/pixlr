@@ -2,7 +2,9 @@
 
 var path = require('path')
     , webpack = require('webpack')
-    , HtmlWebpackPlugin = require('html-webpack-plugin');
+    , HtmlWebpackPlugin = require('html-webpack-plugin')
+    , ExtractTextPlugin = require('extract-text-webpack-plugin')
+    ;
 
 
 module.exports = {
@@ -27,7 +29,8 @@ module.exports = {
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development')
-    })
+    }),
+    new ExtractTextPlugin('[name].css')
   ],
   module: {
     postLoaders: [
@@ -43,8 +46,22 @@ module.exports = {
       include: path.join(__dirname, 'app')
     },
     {
+      test: /\.(png|woff|woff2|eot|ttf|svg)$/, 
+      loader: 'url-loader?limit=100000'
+    },
+    {
+      test: /\.css$/,
+      loader: ExtractTextPlugin.extract (
+        'style-loader',
+        'css-loader'
+        )
+    },
+    {
       test: /\.scss$/,
-      loaders: ['css', 'sass']
+      loader: ExtractTextPlugin.extract (
+        'style-loader',
+        'css-loader!sass-loader'
+        )
     }]
   }
 };

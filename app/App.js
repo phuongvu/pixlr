@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import Button from 'react-bootstrap/lib/Button';
 import createStore from 'redux';
+import io from 'socket.io-client';
 
 var socket 			= io.connect();
 var injectTapEventPlugin = require("react-tap-event-plugin");
