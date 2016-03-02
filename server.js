@@ -20,7 +20,6 @@ const webpack = require('webpack')
       , config = require('./webpack.config.js')
       ;
 
-
 const isDeveloping = process.env.NODE_ENV !== 'production';
 const port = isDeveloping ? 3000 : process.env.PORT;
 
@@ -72,13 +71,14 @@ if (isDeveloping) {
 var d = new Date();
 
 io.on('connection', function(socket) {
-  // console.log('a user connected', socket);
+  console.log("socket id", socket.client.id, io.engine.clientsCount);
 
   socket.on('render', function(msg) {
     console.log('message: ' + msg.status);
   });
 
   socket.on('draw', function(coord) {
+    console.log("coord", coord);
     var x = coord.x,
         y = coord.y;
     if(x < 64 && y < 64) {

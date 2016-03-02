@@ -1,37 +1,24 @@
 'use strict';
 
 import React, { Component } from 'react';
+import ReactArt from 'react-art';
 import _ from 'lodash';
 import Button from 'react-bootstrap/lib/Button';
-import createStore from 'redux';
 import io from 'socket.io-client';
+import GridBoard from './components/GridBoard';
 
 var socket 			= io.connect();
-var injectTapEventPlugin = require("react-tap-event-plugin");
 
+//Inject tap event
+var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
 socket.onerror = function (error) {
   console.error('There was an un-identified Web Socket error', error);
 };
 
-
-var Grid = React.createClass({
-  render: function() {
-  		//Get current size of div
-
-  		//Divide into 64-by-64
-
-  		//Draw
-      return (<div className="grid"></div>);
-}});
-
 export default class App extends Component {
-	componentDidMount() {
-
-
-	};
-
+	
 	reset() {
 		socket.emit('reset', {data: 0});
 	};
@@ -41,11 +28,12 @@ export default class App extends Component {
 	};
 
 	render() {
-    var size = 64;
 		return (
 			<div className="container-fluid">
 				<div className="row">
-						<Grid data={size} />
+						<div id="grid-container">
+							<GridBoard />
+						</div>
 				</div>
 				<div className="row">
 					<Button bsStyle="danger" bsSize="small" onTouchTap={this.reset}>Reset</Button>

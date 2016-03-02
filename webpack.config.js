@@ -6,12 +6,14 @@ var path = require('path')
     , ExtractTextPlugin = require('extract-text-webpack-plugin')
     ;
 
+console.log("path", path.join(__dirname, 'app/main'));
 
 module.exports = {
-  devtool: 'eval-source-map',
+  devtool: 'eval',
   entry: [
     'webpack-hot-middleware/client?reload=true',
-    path.join(__dirname, 'app/main.js')
+    'webpack/hot/only-dev-server',
+    path.join(__dirname, 'app/main')
   ],
   output: {
     path: path.join(__dirname, 'public'),
@@ -24,12 +26,7 @@ module.exports = {
       inject: 'body',
       filename: 'index.html'
     }),
-    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development')
-    }),
     new ExtractTextPlugin('[name].css')
   ],
   module: {
@@ -40,7 +37,7 @@ module.exports = {
       }
     ],
     loaders: [{
-      test: /\.js$/,
+      test: /\.jsx?$/,
       exclude: /node_modules/,
       loaders: ['react-hot', 'babel'],
       include: path.join(__dirname, 'app')
