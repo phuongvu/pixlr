@@ -1,19 +1,17 @@
 'use strict';
 
-var React = require('react')
-		, DisplayHelper = require('../utils/DisplayHelper')
-		, PureRenderMixin = require('react-addons-pure-render-mixin')
-		;
-
+import React from 'react';
+import DisplayHelper from '../utils/DisplayHelper';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { Surface } from 'react-art'
 import Grid from './Grid'
 
 var GridBoard = React.createClass({
 	displayName: 'GridBoard',
-	mixins: [PureRenderMixin],
 	getInitialState: function() {
 		return {
-			dimensions: DisplayHelper.getDimensions()
+			dimensions: DisplayHelper.getDimensions(),
+			color: this.props.color
 		}
 	},
 	setDisplayDimensions: function() {
@@ -31,7 +29,11 @@ var GridBoard = React.createClass({
 		var width = this.state.dimensions.width;
 		var height = this.state.dimensions.height;
 
-		console.log("width", this.state.dimensions.width, this.state.dimensions.height);
+		if (height > width) {
+			height = width;
+		}
+
+		console.log("grid board color", this.props.color);
 
 		return (
 			<Surface width = { width } height = { height }>

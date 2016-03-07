@@ -26,6 +26,15 @@ const port = isDeveloping ? 3000 : process.env.PORT;
 var SimplexNoise = require('simplex-noise'),
     simplex = new SimplexNoise(Math.random);
 
+var hexToRgbConverter = function(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+
 var matrix = new LedMatrix(32, 1, 1, 100);
 // var url = 'http://phuong.vu/?M1X';
 var url = 'http://phuong.vu/';
@@ -71,6 +80,8 @@ if (isDeveloping) {
 var d = new Date();
 
 io.on('connection', function(socket) {
+  var random = false;
+
   console.log("socket id", socket.client.id, io.engine.clientsCount);
 
   socket.on('render', function(msg) {
@@ -80,17 +91,19 @@ io.on('connection', function(socket) {
   socket.on('draw', function(coord) {
     console.log("coord", coord);
     var x = coord.x,
-        y = coord.y;
+        y = coord.y
+        color = hexToRgbConverter(coord.color);
     if(x < 64 && y < 64) {
-      var t = d.getSeconds();
-      var r = Math.floor(simplex.noise3D(x/8, y/8, t/16) * 255);
-      var g = Math.floor(simplex.noise3D(x/16, y/16, t/16) * 255);
-      var b = Math.floor(simplex.noise3D(x/32, y/32, t/16) * 255);
 
-      matrix.setPixel(coord.x, coord.y, r, g, b);
-      matrix.setPixel(coord.x, coord.y - 1, r, g, b);
-      matrix.setPixel(coord.x, coord.y + 1, r, g, b);
-      matrix.setPixel(coord.x + 1, coord.y, r, g, b);
+      // var t = d.getSeconds();
+      // var r = Math.floor(simplex.noise3D(x/8, y/8, t/16) * 255);
+      // var g = Math.floor(simplex.noise3D(x/16, y/16, t/16) * 255);
+      // var b = Math.floor(simplex.noise3D(x/32, y/32, t/16) * 255);
+
+      matrix.setPixel(coord.x, coord.y, color.r, color.g, color.b);
+      matrix.setPixel(coord.x, coord.y - 1, color.r, color.g, color.b);
+      matrix.setPixel(coord.x, coord.y + 1, color.r, color.g, color.b);
+      matrix.setPixel(coord.x + 1, coord.y, color.r, color.g, color.b);
     }
   });
 
@@ -126,13 +139,6 @@ r.db('test').table("posts").insert({
     title: "Lorem ipsum",
     content: "Dolor sit amet"
 }).run();
-
-// mongoose.connect().then(function() {
-//   server.listen(process.env.PORT, function() {
-//     debug('Express listening at %d', server.address().port);
-//   });
-// });
-  
 
 
 process.on('SIGINT', function () {

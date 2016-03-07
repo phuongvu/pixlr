@@ -29,8 +29,8 @@ function getOptimalSize(widthPixels, heightPixels, countHorizontal, countVertica
 
 function calculatePixelCoordinates(baseVector, gridElementSize, axialXCoord, axialYCoord) {
   return {
-    x: baseVector.x + (gridElementSize * 3 / 2 * axialXCoord), //shifting 20px to the right hand side,
-    y: baseVector.y + (gridElementSize * 3 / 2 * axialYCoord)
+    x: baseVector.x + (gridElementSize * 3 / 2 * axialXCoord) + 3, //shift to the right
+    y: baseVector.y + (gridElementSize * 3 / 2 * axialYCoord) + 3
   };
 }
 
@@ -86,12 +86,12 @@ function setupGridPositionsRadial(widthPixels, heightPixels, countHorizontal, co
 
 var Grid = React.createClass({
   displayName: 'Grid',
-  mixins: [PureRenderMixin],
   render: function() {
     var widthPixels = this.props.width;
     var heightPixels = this.props.height;
     var countHorizontal = this.props.hSize;
     var countVertical = this.props.vSize;
+    var that = this;
 
     var gridElementPositions = setupGridPositionsRadial(
         widthPixels, 
@@ -103,6 +103,7 @@ var Grid = React.createClass({
     var grid = _.map(gridElementPositions, function(row, index) {
       var rowElements = _.map(row, function(data) {
         var key = data.keyName;
+        console.log("that color", that.props.color);
         return (
           <GridTile key={key} coords={data.normalizedCoordinates} size={data.size} centre={data.pixelCoordinates}></GridTile>
         );

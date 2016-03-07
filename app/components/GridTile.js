@@ -37,7 +37,6 @@ var makeSquarePath = function(size, centre) {
 
 var GridTile = React.createClass({
 	displayName: 'GridTile',
-	mixins: [PureRenderMixin],
 	getInitialState: function() {
 		return {
 			isSelected: false
@@ -46,19 +45,20 @@ var GridTile = React.createClass({
 
 	handleTouch: function() {
 		this.setState({
-			isSelected: !this.state.isSelected
+			isSelected: true
 		});
-		socket.emit('draw', {x: this.props.coords.x, y: this.props.coords.y});
+		console.log("draw", this.props.coords.x, this.props.coords.y, this.props.color);
+		socket.emit('draw', {x: this.props.coords.x, y: this.props.coords.y, color: this.props.color});
 	},
 
 	render: function() {
-		var color = this.state.isSelected ? '#888' : '#111';
+		var color = this.state.isSelected ? '#' + this.props.color : '#c9c9c9';
 
 		// TODO - this could be optimised, don't need to calculate coords for every hex, just one and then offset.
 		var path = makeSquarePath(this.props.size, this.props.centre);
 			
 		return (
-			<Shape d={path} fill={color} opacity='0.5' onTouchTap={this.handleTouch.bind(null, this)}></Shape>
+			<Shape d={path} fill={color} opacity='1' onClick={this.handleTouch.bind(null, this)}></Shape>
 		);
 	}
 });
