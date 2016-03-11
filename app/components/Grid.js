@@ -1,17 +1,12 @@
-'use strict';
-
-var React       = require('react')
-		, _         = require('lodash')
-    , PureRenderMixin = require('react-addons-pure-render-mixin')
-		;
-
+import React from 'react'
+import _ from 'lodash'
 import { Group } from 'react-art'
 import GridTile from './GridTile'
 
 var SIZE_TO_PACKED_WIDTH = 1.6;
 var SIZE_TO_PACKED_HEIGHT = 1.6;
 
-function getOptimalSize(widthPixels, heightPixels, countHorizontal, countVertical) {
+const getOptimalSize = (widthPixels, heightPixels, countHorizontal, countVertical) => {
   var packedWidth = widthPixels / (parseInt(countHorizontal, 10));
   var packedHeight = heightPixels / (parseInt(countVertical, 10));
 
@@ -27,41 +22,36 @@ function getOptimalSize(widthPixels, heightPixels, countHorizontal, countVertica
   return size.toFixed(8);
 }
 
-function calculatePixelCoordinates(baseVector, gridElementSize, axialXCoord, axialYCoord) {
+const calculatePixelCoordinates = (baseVector, gridElementSize, axialXCoord, axialYCoord) => {
   return {
     x: baseVector.x + (gridElementSize * 3 / 2 * axialXCoord) + 3, //shift to the right
     y: baseVector.y + (gridElementSize * 3 / 2 * axialYCoord) + 3
   };
 }
 
-function setupGridPositionsRadial(widthPixels, heightPixels, countHorizontal, countVertical) {
-  var size = getOptimalSize(
+const setupGridPositionsRadial = (widthPixels, heightPixels, countHorizontal, countVertical) => {
+  let size = getOptimalSize(
       widthPixels, 
       heightPixels, 
       countHorizontal,
       countVertical
   );
 
-  var centreX = Math.floor(widthPixels / 2);
-  var centreY = Math.floor(heightPixels / 2);
-  var gridRadiusHorizontal = countHorizontal / 2;
-  var gridRadiusVertical = countVertical / 2;
-
-  var centreVector = {
-    x: centreX,
-    y: centreY
+  let centreVector = {
+    x: Math.floor(widthPixels / 2),
+    y: Math.floor(heightPixels / 2)
   };
 
-  var gridElementSize = parseFloat(size, 10);
+  let gridElementSize = parseFloat(size, 10);
 
-  var rows = [];
+  let rows = [];
   _.times(countVertical, function(indexVertical) {
 
-    var axialYCoord = indexVertical - gridRadiusVertical;
+    let axialYCoord = indexVertical - countVertical / 2;
     var row = [];
 
     _.times(countHorizontal, function(indexHorizontal) {
-      var axialXCoord = indexHorizontal - gridRadiusHorizontal;
+      let axialXCoord = indexHorizontal - countHorizontal / 2;
 
       row.push({
         keyName: 'tile_' + axialXCoord + '_' + axialYCoord,
@@ -84,29 +74,44 @@ function setupGridPositionsRadial(widthPixels, heightPixels, countHorizontal, co
   return rows;
 }
 
-var Grid = React.createClass({
-  displayName: 'Grid',
-  render: function() {
+class Grid extends React.Component {
+
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
     var widthPixels = this.props.width;
     var heightPixels = this.props.height;
     var countHorizontal = this.props.hSize;
     var countVertical = this.props.vSize;
     var that = this;
 
-    var gridElementPositions = setupGridPositionsRadial(
+    let gridElementPositions = setupGridPositionsRadial(
         widthPixels, 
         heightPixels, 
         countHorizontal, 
         countVertical
     );
 
-    var grid = _.map(gridElementPositions, function(row, index) {
-      var rowElements = _.map(row, function(data) {
-        var key = data.keyName;
+    let grid = _.map(gridElementPositions, function(row, index) {
+      let rowElements = _.map(row, function(data, index) {
+        let key = data.keyName;
+
         return (
           <GridTile key={key} coords={data.normalizedCoordinates} size={data.size} centre={data.pixelCoordinates}></GridTile>
         );
       });
+
+      if (index === 0) {
+        rowElements.push(
+            <GridTile key={'marker'} color={'#f44336'} 
+              size={rowElements[0].props.size * 1.5} 
+              centre={{x: rowElements[0].props.centre.x - rowElements[0].props.size - 4, y: rowElements[0].props.centre.y - rowElements[0].props.size - 4}}
+              isCircle={true}>
+            </GridTile>
+          );
+      }
 
       return (
         <Group key={ 'row_' + index }>
@@ -121,6 +126,6 @@ var Grid = React.createClass({
       </Group>
     );
   }
-});
+}
 
 export default Grid;

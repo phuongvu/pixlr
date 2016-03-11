@@ -1,33 +1,33 @@
-'use strict';
-
 import React from 'react';
 import DisplayHelper from '../utils/DisplayHelper';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { Surface } from 'react-art'
 import Grid from './Grid'
 
-var GridBoard = React.createClass({
-	displayName: 'GridBoard',
-	getInitialState: function() {
-		return {
-			dimensions: DisplayHelper.getDimensions(),
-			color: this.props.color
-		}
-	},
-	setDisplayDimensions: function() {
+class GridBoard extends React.Component {
+	constructor(props) {
+		super(props);
+    this.state = {
+    	dimensions: DisplayHelper.getDimensions()
+    }
+	}
+	
+	setDisplayDimensions() {
 		this.setState({
 			dimensions: DisplayHelper.getDimensions()
-		});
-	},
-	componentWillMount: function() {
+		})
+	}
+
+	componentWillMount() {
 		DisplayHelper.subscribeResize(this.setDisplayDimensions);
-	},
-	componentWillUnmount: function() {
+	}
+
+	componentWillUnmount() {
 		DisplayHelper.unsubscribeResize(this.setDisplayDimensions);
-	},
-	render: function() {
-		var width = this.state.dimensions.width;
-		var height = this.state.dimensions.height;
+	}
+
+	render() {
+		let width = this.state.dimensions.width;
+		let height = this.state.dimensions.height;
 
 		if (height > width) {
 			height = width;
@@ -40,6 +40,6 @@ var GridBoard = React.createClass({
 		);
 	}
 
-});
+}
 
 export default GridBoard;

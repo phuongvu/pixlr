@@ -60,7 +60,7 @@ export default class App extends Component {
 						<RaisedButton style={{margin: 10}} primary={true} onTouchTap={ this.reset } label="Reset" />
 					</div>
 					<div className="col-xs-6 col-md-6">
-						<RaisedButton style={{margin: 10}} secondary={true} onTouchTap={ this.randomize } label="Randomize" />
+						<RaisedButton style={{margin: 10}} secondary={true} onTouchTap={ this.randomize } label="Surprise me!" />
 					</div>
 				</div>
 			</div>
