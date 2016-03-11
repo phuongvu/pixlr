@@ -43,8 +43,12 @@ module.exports = {
       include: path.join(__dirname, 'app')
     },
     {
-      test: /\.(png|woff|woff2|eot|ttf|svg)$/, 
+      test: /\.(png|svg)$/, 
       loader: 'url-loader?limit=100000'
+    },
+    {
+      test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/, 
+      loader: 'file-loader?name=fonts/[name].[ext]'
     },
     {
       test: /\.css$/,
