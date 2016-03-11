@@ -7,7 +7,7 @@ import io from 'socket.io-client'
 import GridBoard from './components/GridBoard'
 import AppBarMenu from './components/AppBarMenu'
 import RaisedButton from 'material-ui/lib/raised-button'
-import ControllButtons from './components/ControllButtons'
+import OrientationChange from './containers/OrientationChange'
 import ColorSelector from './containers/ColorSelector'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
@@ -42,7 +42,7 @@ export default class App extends Component {
 					ARTable
 				</div>
 				<div className="row">
-					<ControllButtons />
+					<OrientationChange />
 				</div>
 				<div className="row">
 					<GridBoard />

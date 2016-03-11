@@ -13,7 +13,6 @@ export const draw = (pixel) => {
 }
 
 export const selectColor = (color) => {
-	console.log("actions color", color);
 	return { 
 		type: types.SELECT_COLOR, 
 		color: color 
@@ -22,4 +21,10 @@ export const selectColor = (color) => {
 
 export const clear = () => {
 	return { type: types.CLEAR };
+}
+
+export const rotate = () => {
+	return {
+		type: types.ROTATE
+	}
 }

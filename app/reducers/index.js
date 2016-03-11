@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux'
-import colorSelection from './colorSelection'
+import selectedColor from './selectedColor'
 import pixels from './pixels'
+import orientation from './orientation'
 
 const rootReducer = combineReducers({
-	colorSelection,
+	selectedColor,
+	orientation,
 	pixels
 })
 
