@@ -33,8 +33,6 @@ var GridBoard = React.createClass({
 			height = width;
 		}
 
-		console.log("grid board color", this.props.color);
-
 		return (
 			<Surface width = { width } height = { height }>
 				<Grid width = { width } height = { height } vSize = '64' hSize = '64' />

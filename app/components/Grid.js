@@ -103,7 +103,6 @@ var Grid = React.createClass({
     var grid = _.map(gridElementPositions, function(row, index) {
       var rowElements = _.map(row, function(data) {
         var key = data.keyName;
-        console.log("that color", that.props.color);
         return (
           <GridTile key={key} coords={data.normalizedCoordinates} size={data.size} centre={data.pixelCoordinates}></GridTile>
         );

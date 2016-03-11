@@ -9,7 +9,7 @@ import MenuItem from 'material-ui/lib/menus/menu-item';
 import ImageBrush from 'material-ui/lib/svg-icons/image/brush';
 
 const style = {
-  'backgroundColor': '#89bdd3'
+  'backgroundColor': '#729f98'
 };
 
 const AppBarMenu = () => (

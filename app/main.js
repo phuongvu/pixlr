@@ -1,7 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-require('./bower_components/bootstrap/dist/css/bootstrap.min.css');
-require('./css/main.scss');
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import App from './App'
+import configureStore from './store/configureStore'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import './bower_components/bootstrap/dist/css/bootstrap.min.css'
+import './css/main.scss'
+import 'json!./manifest.json'
+
+const store = configureStore()
+
+ReactDOM.render(
+	<Provider store={store}>
+		<App />
+	</Provider>,
+	document.getElementById('root')
+)
