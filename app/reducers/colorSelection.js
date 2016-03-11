@@ -1,7 +1,7 @@
 import { SELECT_COLOR } from '../constants/ActionTypes'
 
 const initialState = {
-	selectedColor: ''
+	selectedColor: '#ff4081'
 }
 
 const colorSelection = (state = initialState, action) => {

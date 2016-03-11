@@ -26,10 +26,6 @@ export default class App extends Component {
     this.reset = this.reset.bind(this)
     this.randomize = this.randomize.bind(this)
   }
-
-	changeHandle(color) {
-    console.log("color", color);
-  }
 	
 	reset() {
 		socket.emit('reset', {data: 0})
@@ -42,8 +38,8 @@ export default class App extends Component {
 	render() {
 		return (
 			<div className="container-fluid">
-				<div className="row">
-					<AppBarMenu />
+				<div className="row title align-center">
+					ARTable
 				</div>
 				<div className="row">
 					<ControllButtons />
@@ -51,10 +47,11 @@ export default class App extends Component {
 				<div className="row">
 					<GridBoard />
 				</div>
-				<div className="row">
-					<div className="row">
+				<div className="row color-selector">
+					<div className="row color-selector__title align-center">
+						Select a color:
 					</div>
-					<div className="row" style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+					<div className="row color-selector__pellets align-center">
 						<ColorSelector />
 					</div>
 				</div>

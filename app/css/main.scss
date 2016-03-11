@@ -8,9 +8,26 @@ body {
 	background-color: #1d2120;
 }
 
-.color-picker {
-	margin-bottom: 15px;
-	margin-left: auto;
-	margin-right: auto;
-	width: 94%;
+.align-center {
+	display: flex;
+	align-items: center; 
+	justify-content: center;
+}
+
+.title, .color-selector {
+	color: white;
+}
+
+.title {
+	font-size: 1.5rem;
+	margin-top: 0.5rem;
+}
+
+.color-selector {
+	margin-bottom: 5px;
+}
+
+.selected svg {
+	border: thin solid white;
+  border-radius: 50%;
 }

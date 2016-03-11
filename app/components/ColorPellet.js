@@ -4,13 +4,20 @@ import Lens from 'material-ui/lib/svg-icons/image/lens'
 
 const iconStyles = {
 	selected: {
-
+		borderStyle: 'solid',
+		borderWidth: 'thin',
+		borderRadius: '50%',
+		borderColor: 'white',
+		margin: '4px'
+	},
+	unselected: {
+		borderStyle: 'none'
 	}
 }
 
 const ColorPellet = ({ onClick, selected, color}) => (
-	<IconButton touch={true} onTouchTap={onClick}>
-      <Lens color={color} style={selected ? 'selected' : ''}/>
+	<IconButton touch={true} onTouchTap={onClick} className={selected ? 'selected' : ''}>
+      <Lens color={color} />
   </IconButton>
 );
 

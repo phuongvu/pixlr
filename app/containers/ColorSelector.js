@@ -3,9 +3,7 @@ import { connect } from 'react-redux'
 import { selectColor } from '../actions'
 import ColorPellets from '../components/ColorPellets'
 
-
 const mapStateToProps = (state) => {
-	console.log("state", state);
   return { 
   	selectedColor: state.colorSelection.selectedColor
   }

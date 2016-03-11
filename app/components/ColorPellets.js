@@ -30,6 +30,10 @@ const colors = [
 {
   hex: '#fafafa',
   name: Colors.grey50
+},
+{
+  hex: '#fa9800',
+  name: Colors.grey50
 }]
 
 const ColorPellets = ({ onClick, selectedColor }) => (
