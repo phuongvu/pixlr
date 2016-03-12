@@ -4,11 +4,14 @@ import React, { Component } from 'react'
 import ReactArt from 'react-art'
 import _ from 'lodash'
 import io from 'socket.io-client'
-import GridBoard from './components/GridBoard'
+
 import AppBarMenu from './components/AppBarMenu'
+
 import RaisedButton from 'material-ui/lib/raised-button'
 import OrientationChange from './containers/OrientationChange'
 import ColorSelector from './containers/ColorSelector'
+import Pixels from './containers/Pixels'
+
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
 
@@ -45,11 +48,11 @@ export default class App extends Component {
 					<OrientationChange />
 				</div>
 				<div className="row">
-					<GridBoard />
+					<Pixels />
 				</div>
 				<div className="row color-selector">
 					<div className="row color-selector__title align-center">
-						Select a color:
+						Select a color
 					</div>
 					<div className="row color-selector__pellets align-center">
 						<ColorSelector />

@@ -9,18 +9,18 @@ export const draw = (pixel) => {
 		x: pixel.x,
 		y: pixel.y,
 		color: pixel.color 
-	};
+	}
 }
 
 export const selectColor = (color) => {
 	return { 
 		type: types.SELECT_COLOR, 
 		color: color 
-	};
+	}
 }
 
 export const clear = () => {
-	return { type: types.CLEAR };
+	return { type: types.CLEAR }
 }
 
 export const rotate = () => {
