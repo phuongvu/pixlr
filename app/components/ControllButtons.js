@@ -4,15 +4,14 @@ import FontIcon from 'material-ui/lib/font-icon';
 import Colors from 'material-ui/lib/styles/colors';
 import ImageRotateLeft from 'material-ui/lib/svg-icons/image/rotate-left';
 
-const ControllButtons = ({orientation, onClick}) => (
-  <IconButton touch={ true } onTouchTap={ onClick }>
+const ControllButtons = ({onclick}) => (
+  <IconButton touch={ true } onClick={ onclick }>
     <ImageRotateLeft color='white'/>
   </IconButton>
-);
+)
 
 ControllButtons.propTypes = {
-	orientation: React.PropTypes.number.isRequired,
-	onClick: React.PropTypes.func.isRequired
+	onclick: React.PropTypes.func.isRequired
 }
 
 export default ControllButtons;

@@ -24,7 +24,5 @@ export const clear = () => {
 }
 
 export const rotate = () => {
-	return {
-		type: types.ROTATE
-	}
+	return { type: types.ROTATE }
 }

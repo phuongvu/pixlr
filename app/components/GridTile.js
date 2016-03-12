@@ -10,25 +10,25 @@ const makeShapePath = (size, centre, points) => {
 		, y = null
 
 	while (point < points) {
-		angle = 2 * Math.PI / points * (point + 0.5);
-		x = centre.x + size * Math.cos(angle);
-		y = centre.y + size * Math.sin(angle);
+		angle = 2 * Math.PI / points * (point + 0.5)
+		x = centre.x + size * Math.cos(angle)
+		y = centre.y + size * Math.sin(angle)
 
 		if (point === 0) {
-			path.moveTo(x, y);
+			path.moveTo(x, y)
 		}
 		else {
-			path.lineTo(x, y);
+			path.lineTo(x, y)
 		}
 
-		point = point + 1;
+		point = point + 1
 	}
 
 	return path;
 };
 
 const GridTile = ({size, centre, color, isCircle}) => (
-	<Shape d={isCircle ? makeShapePath(size, centre, 15) : makeShapePath(size, centre, 4)} fill={color ? color : '#FAFAFA'} opacity='1'></Shape>
+	<Shape d={isCircle ? makeShapePath(size, centre, 10) : makeShapePath(size, centre, 4)} fill={color ? color : '#FAFAFA'} opacity='1'></Shape>
 )
 
 GridTile.propTypes = {

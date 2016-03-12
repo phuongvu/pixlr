@@ -10,7 +10,7 @@ import AppBarMenu from './components/AppBarMenu'
 import RaisedButton from 'material-ui/lib/raised-button'
 import OrientationChange from './containers/OrientationChange'
 import ColorSelector from './containers/ColorSelector'
-import Pixels from './containers/Pixels'
+import GridBoard from './components/GridBoard'
 
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
@@ -48,7 +48,7 @@ export default class App extends Component {
 					<OrientationChange />
 				</div>
 				<div className="row">
-					<Pixels />
+					<GridBoard />
 				</div>
 				<div className="row color-selector">
 					<div className="row color-selector__title align-center">
