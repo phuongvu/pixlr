@@ -5,76 +5,13 @@ import Grid from './Grid'
 import GridTile from './GridTile'
 import { connect } from 'react-redux'
 import { rotate } from '../actions'
-
-var SIZE_TO_PACKED_WIDTH = 1.6;
-var SIZE_TO_PACKED_HEIGHT = 1.6;
-
-const getOptimalSize = (widthPixels, heightPixels, countHorizontal, countVertical) => {
-  var packedWidth = widthPixels / (parseInt(countHorizontal, 10));
-  var packedHeight = heightPixels / (parseInt(countVertical, 10));
-
-  var size = null;
-
-  if ((packedWidth / SIZE_TO_PACKED_WIDTH) < (packedHeight / SIZE_TO_PACKED_HEIGHT)) {
-    size = packedWidth / SIZE_TO_PACKED_WIDTH;
-  }
-  else {
-    size = packedHeight / SIZE_TO_PACKED_HEIGHT;
-  }
-
-  return size.toFixed(8);
-}
+import ReactDOM from 'react-dom'
 
 const calculatePixelCoordinates = (baseVector, gridElementSize, axialXCoord, axialYCoord) => {
   return {
-    x: baseVector.x + (gridElementSize * 3 / 2 * axialXCoord) + 3, //shift to the right
-    y: baseVector.y + (gridElementSize * 3 / 2 * axialYCoord) + 3
+    x: baseVector.x + (gridElementSize * 3 / 2 * axialXCoord),
+    y: baseVector.y + (gridElementSize * 3 / 2 * axialYCoord)
   };
-}
-
-const setupGridPositionsRadial = (widthPixels, heightPixels, countHorizontal, countVertical) => {
-  let size = getOptimalSize(
-      widthPixels, 
-      heightPixels, 
-      countHorizontal,
-      countVertical
-  );
-
-  let centreVector = {
-    x: Math.floor(widthPixels / 2),
-    y: Math.floor(heightPixels / 2)
-  };
-
-  let gridElementSize = parseFloat(size, 10);
-
-  let rows = [];
-  _.times(countVertical, function(indexVertical) {
-
-    let axialYCoord = indexVertical - countVertical / 2;
-    var row = [];
-
-    _.times(countHorizontal, function(indexHorizontal) {
-      let axialXCoord = indexHorizontal - countHorizontal / 2;
-
-      row.push({
-        keyName: 'tile_' + axialXCoord + '_' + axialYCoord,
-        axialCoordinates: {
-          x: axialXCoord,
-          y: axialYCoord 
-        },
-        normalizedCoordinates: {
-          x: axialXCoord + countHorizontal/2,
-          y: axialYCoord + countVertical/2
-        },
-        size: gridElementSize - 0.4,
-        pixelCoordinates: calculatePixelCoordinates(centreVector, gridElementSize, axialXCoord, axialYCoord)
-      });
-    });
-
-    rows.push(row);
-  });
-
-  return rows;
 }
 
 class Grids extends React.Component {
@@ -84,7 +21,45 @@ class Grids extends React.Component {
     	dimensions: getDimensions()
     }
     this.setDisplayDimensions = this.setDisplayDimensions.bind(this)
+    this.touchStart = this.touchStart.bind(this)
+    this.touchMove = this.touchMove.bind(this)
+    this.getTouchPos = this.getTouchPos.bind(this)
 	}
+
+  draw(ctx, x, y, color) {
+    ctx.fillStyle = color
+    ctx.beginPath()
+    ctx.arc(x, y, 10, 0, Math.PI*2, true)
+    ctx.closePath()
+    ctx.fill()
+  }
+
+  touchStart(e) {
+    console.log(this);
+    let canvas = ReactDOM.findDOMNode(this)
+    this.draw(canvas.getContext('2d'), this.getTouchPos(e).x, this.getTouchPos(e).y, this.props.selectedColor)
+    e.preventDefault()
+  }
+
+  touchMove(e) {
+    let canvas = ReactDOM.findDOMNode(this)
+    this.draw(canvas.getContext('2d'), this.getTouchPos(e).x, this.getTouchPos(e).y, this.props.selectedColor)
+    e.preventDefault()
+  }
+
+  getTouchPos(e) {
+    console.log("e", e, e.touches);
+    if (e.touches) {
+      if (e.touches.length === 1) { // Only deal with one finger
+        var touch = e.targetTouches[0] // Get the information for finger #1
+        console.log("x, y", touch.pageX - touch.target.offsetLeft, touch.screenY - touch.target.offsetTop);
+        return {
+          x: (touch.clientX - touch.target.offsetLeft)*3,
+          y: (touch.clientY - touch.target.offsetTop)*3
+        }
+      }
+    }
+  }
 	
 	setDisplayDimensions(props) {
 		this.setState({
@@ -100,32 +75,31 @@ class Grids extends React.Component {
 		unsubscribeResize(this.setDisplayDimensions)
 	}
 
+  componentDidMount(props) {
+    let canvas = ReactDOM.findDOMNode(this)
+    console.log("dom", canvas)
+    canvas.addEventListener('touchstart', this.touchStart, false);
+    canvas.addEventListener('touchmove', this.touchMove, false);
+  }
+
 	shouldComponentUpdate(nextProps, nextState) {
-		console.log("should?", nextProps, this.props);
-  	return nextProps.orientation != this.props.orientation || nextProps.selectedColor != this.props.selectedColor;
+    return false
 	}
 
 	render() {
 		let width = this.state.dimensions.width
 		let height = this.state.dimensions.height
 
-		console.log("props", this.props.orientation, this.props.selectedColor);
-
 		if (height > width) {
 			height = width
 		}
 
-		let rows = setupGridPositionsRadial(width, height, '64', '64');
-
-		return (
+		const surface = ( 
 			<Surface width = { width } height = { height } className={'rotate-left-' + this.props.orientation}>
-				<GridTile key={'marker'} color={'#f44336'} 
-                        size={rows[0][0].size * 1.5} 
-                        centre={{x: rows[0][0].pixelCoordinates.x - rows[0][0].size - 4, y: rows[0][0].pixelCoordinates.y - rows[0][0].size - 4}}
-                        isCircle={true} />
-				<Grid rows={rows} />
 			</Surface>
-		)
+    )
+		
+    return surface
 	}
 }
 
