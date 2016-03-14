@@ -30,7 +30,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "gm": "^1.21.1",
     "indejection": "^0.1.5",
-    "lodash": "^3.10.1",
+    "lodash": "^4.6.1",
     "material-ui": "^0.14.4",
     "mongoose": "^4.2.5",
     "morgan": "^1.6.1",

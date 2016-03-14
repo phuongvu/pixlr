@@ -1,6 +1,9 @@
 import React from 'react'
 import Colors from 'material-ui/lib/styles/colors'
+import IconButton from 'material-ui/lib/icon-button'
+import ImageLooks from 'material-ui/lib/svg-icons/image/looks'
 import ColorPellet from './ColorPellet'
+var SimplexNoise = require('simplex-noise')
 
 const colors = [
 {
@@ -42,6 +45,9 @@ const ColorPellets = ({ onClick, selectedColor }) => (
         selected={ selectedColor === color.hex ? true : false }
       />
     )}
+    <IconButton touch={true} onClick={() => onClick('#00838f')} className={selectedColor === '#00838f' ? 'selected' : ''}>
+      <ImageLooks color={Colors.blueGrey50} className={'rainbow'} />
+    </IconButton>
   </div>
 )
 

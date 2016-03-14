@@ -1,18 +1,11 @@
 import { DRAW, CLEAR } from '../constants/ActionTypes'
+import _ from 'lodash'
 
 const pixels = (state = [], action) => {
 	switch (action.type) {
 		case DRAW:
-			return [
-				{
-					id: state.reduce((maxId, pixel) => Math.max(pixel.id, maxId), -1) + 1,
-					x: action.pixel.x,
-					y: action.pixel.y,
-					color: action.pixel.color,
-					isOn: true
-				},
-				...state
-			]
+			console.log("dispatched", action)
+			return _.flatten(_.concat(state, action.pixels))
 		case CLEAR:
 			return state.filter(pixel => 
 				pixel.isOn === true
