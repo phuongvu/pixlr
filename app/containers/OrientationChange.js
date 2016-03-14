@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { rotate } from '../actions'
-import ControllButtons from '../components/ControllButtons'
+import { RotateButton } from '../components/ControllButtons'
 
 const mapDispatchToProps = (dispatch) => {
 	return {
@@ -11,6 +11,6 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-const OrientationChange = connect(null, mapDispatchToProps)(ControllButtons)
+const OrientationChange = connect(null, mapDispatchToProps)(RotateButton)
 
 export default OrientationChange

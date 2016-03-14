@@ -79,8 +79,8 @@ class Grids extends React.Component {
             return {
               px: x*this.ratio,
               py: y*this.ratio,
-              x: (this.width/ratio - x)*this.ratio,
-              y: (this.width/ratio - y)*this.ratio
+              x: (this.width/this.ratio - x)*this.ratio,
+              y: (this.width/this.ratio - y)*this.ratio
             }
           case 3:
             return {
@@ -152,6 +152,7 @@ class Grids extends React.Component {
 
 		const surface = (
 		  <Surface width = { width } height = { height } className={'canvas'}>
+
 		  </Surface>
     )
 		

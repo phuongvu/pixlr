@@ -4,6 +4,7 @@ import _ from 'lodash'
 const pixels = (state = [], action) => {
 	switch (action.type) {
 		case DRAW:
+			console.log("dispatched", action)
 			return _.flatten(_.concat(state, action.pixels))
 		case CLEAR:
 			return state.filter(pixel => 

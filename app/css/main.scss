@@ -35,16 +35,16 @@ body {
 	justify-content: center;
 }
 
-.title, .color-selector {
+.title, .color-selector__title, .sketchpad__title {
 	color: white;
 }
 
 .title {
 	font-family: halloSans;
-	font-size: 3.5rem;
+	font-size: 3rem;
 	margin-left: auto;
 	margin-right: auto;
-	margin-top: 0.5rem;
+	margin-top: 1rem;
 }
 
 .color-selector {
@@ -54,30 +54,6 @@ body {
 .selected svg {
 	border: thin solid white;
   border-radius: 50%;
-}
-
-.rotate-left-1 {
-  -webkit-transform: rotate(-90deg);
-  -moz-transform: rotate(-90deg);
-  -o-transform: rotate(-90deg);
-  -ms-transform: rotate(-90deg);
-  transform: rotate(-90deg);
-}
-
-.rotate-left-2 {
-  -webkit-transform: rotate(-180deg);
-  -moz-transform: rotate(-180deg);
-  -o-transform: rotate(-180deg);
-  -ms-transform: rotate(-180deg);
-  transform: rotate(-180deg);
-}
-
-.rotate-left-3 {
-  -webkit-transform: rotate(-270deg);
-  -moz-transform: rotate(-270deg);
-  -o-transform: rotate(-270deg);
-  -ms-transform: rotate(-270deg);
-  transform: rotate(-270deg);
 }
 
 .rainbow {
