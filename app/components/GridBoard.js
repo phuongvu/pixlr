@@ -1,7 +1,6 @@
 import React from 'react';
 import { getDimensions, subscribeResize, unsubscribeResize } from '../utils/DisplayHelper';
 import { Surface } from 'react-art'
-import Marker from './Marker'
 import { connect } from 'react-redux'
 import { rotate } from '../actions'
 import ReactDOM from 'react-dom'
