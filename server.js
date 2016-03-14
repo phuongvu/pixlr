@@ -24,15 +24,16 @@ const isDeveloping = process.env.NODE_ENV !== 'production';
 const port = isDeveloping ? 3000 : process.env.PORT;
 
 var SimplexNoise = require('simplex-noise'),
-    simplex = new SimplexNoise(Math.random);
+    simplex = new SimplexNoise(Math.random),
+    d = new Date();
 
 var hexToRgbConverter = function(hex) {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? {
         r: parseInt(result[1], 16),
         g: parseInt(result[2], 16),
         b: parseInt(result[3], 16)
-    } : null;
+      } : null;
 }
 
 var matrix = new LedMatrix(32, 1, 1, 100);
@@ -77,33 +78,43 @@ if (isDeveloping) {
   app.use(morgan('combined'));
 }
 
-var d = new Date();
-
 io.on('connection', function(socket) {
   var random = false;
 
-  console.log("socket id", socket.client.id, io.engine.clientsCount);
+  debug("socket id", socket.client.id, io.engine.clientsCount);
 
   socket.on('render', function(msg) {
-    console.log('message: ' + msg.status);
+    debug('message: ' + msg.status);
   });
 
   socket.on('draw', function(coord) {
-    console.log("coord", coord);
     var x = coord.x,
         y = coord.y
-        color = hexToRgbConverter(coord.color);
+        color = coord.color;
+
+    debug("coords", coord)
+
+    var rgb;
+
+    if(color === 'rainbow') {
+      var t = d.getSeconds();
+      var r = Math.floor(simplex.noise3D(x/8, y/8, t/16) * 255);
+      var g = Math.floor(simplex.noise3D(x/16, y/16, t/16) * 255);
+      var b = Math.floor(simplex.noise3D(x/32, y/32, t/16) * 255);
+      rgb = {
+        r: r,
+        g: g,
+        b: b
+      } 
+    } else {
+      rgb = hexToRgbConverter(coord.color)
+    }
+
     if(x < 64 && y < 64) {
-
-      // var t = d.getSeconds();
-      // var r = Math.floor(simplex.noise3D(x/8, y/8, t/16) * 255);
-      // var g = Math.floor(simplex.noise3D(x/16, y/16, t/16) * 255);
-      // var b = Math.floor(simplex.noise3D(x/32, y/32, t/16) * 255);
-
-      matrix.setPixel(coord.x, coord.y, color.r, color.g, color.b);
-      matrix.setPixel(coord.x, coord.y - 1, color.r, color.g, color.b);
-      matrix.setPixel(coord.x, coord.y + 1, color.r, color.g, color.b);
-      matrix.setPixel(coord.x + 1, coord.y, color.r, color.g, color.b);
+      matrix.setPixel(coord.x, coord.y, rgb.r, rgb.g, rgb.b);
+      matrix.setPixel(coord.x, coord.y - 1, rgb.r, rgb.g, rgb.b);
+      matrix.setPixel(coord.x, coord.y + 1, rgb.r, rgb.g, rgb.b);
+      matrix.setPixel(coord.x + 1, coord.y, rgb.r, rgb.g, rgb.b);
     }
   });
 

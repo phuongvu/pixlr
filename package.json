@@ -28,6 +28,7 @@
     "eddystone-beacon": "^1.0.5",
     "express": "^4.13.3",
     "extract-text-webpack-plugin": "^1.0.1",
+    "flux": "^2.1.1",
     "gm": "^1.21.1",
     "indejection": "^0.1.5",
     "lodash": "^3.10.1",

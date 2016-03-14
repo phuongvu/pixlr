@@ -6,11 +6,9 @@
 html, body {
   width: 100%;
   height: 100%;
-  overflow: hidden;
-}
-
-body {
-	background-color: #1d2120;
+  overflow-x: hidden;
+  color: #FAFAFA;
+  background-color: #1d2120;
 }
 
 #id {
@@ -28,21 +26,18 @@ body {
 	justify-content: center;
 }
 
-.title, .color-selector {
-	color: white;
-}
-
 .title {
 	font-family: halloSans;
-	font-size: 3rem;
-	border: thin solid white;
+	font-size: 3.5rem;
 	margin-left: auto;
 	margin-right: auto;
-	margin-top: 0.5rem;
+	margin-top: 1rem;
+  text-decoration: underline;
 }
 
 .color-selector {
 	margin-bottom: 5px;
+  font-size: 1.5rem;
 }
 
 .selected svg {
@@ -72,4 +67,17 @@ body {
   -o-transform: rotate(-270deg);
   -ms-transform: rotate(-270deg);
   transform: rotate(-270deg);
+}
+
+.pictionary {
+  margin-top: 1.5rem;  
+}
+
+.pictionary__title, .pictionary__words {
+  font-size: 2rem;
+  margin-left: 1.5rem;
+}
+
+.pictionary__words {
+  color: pink;
 }

@@ -26,3 +26,10 @@ export const clear = () => {
 export const rotate = () => {
 	return { type: types.ROTATE }
 }
+
+export const words = (w) => {
+	return { 
+		type: types.WORD,
+		word: w
+	}
+}

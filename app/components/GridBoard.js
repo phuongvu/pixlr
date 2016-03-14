@@ -6,13 +6,8 @@ import GridTile from './GridTile'
 import { connect } from 'react-redux'
 import { rotate } from '../actions'
 import ReactDOM from 'react-dom'
-
-const calculatePixelCoordinates = (baseVector, gridElementSize, axialXCoord, axialYCoord) => {
-  return {
-    x: baseVector.x + (gridElementSize * 3 / 2 * axialXCoord),
-    y: baseVector.y + (gridElementSize * 3 / 2 * axialYCoord)
-  };
-}
+import { draw } from '../actions'
+import io from 'socket.io-client'
 
 class Grids extends React.Component {
 	constructor() {
@@ -35,15 +30,29 @@ class Grids extends React.Component {
   }
 
   touchStart(e) {
-    console.log(this);
-    let canvas = ReactDOM.findDOMNode(this)
-    this.draw(canvas.getContext('2d'), this.getTouchPos(e).x, this.getTouchPos(e).y, this.props.selectedColor)
+    let x =  this.getTouchPos(e).x
+    let y = this.getTouchPos(e).y
+    let px = this.getTouchPos(e).px
+    let py = this.getTouchPos(e).py
+    let color = this.props.selectedColor
+
+    this.pixels.push({x: x, y: y, px: px, py: py, color: color, timestamp: Date.now()})
+    this.draw(this.ctx, x, y, 5*this.ratio, color)
+    this.socket.emit('draw', {x: Math.floor(px*64/this.width), y: Math.floor(py*64/this.width), color: color})
     e.preventDefault()
   }
 
   touchMove(e) {
-    let canvas = ReactDOM.findDOMNode(this)
-    this.draw(canvas.getContext('2d'), this.getTouchPos(e).x, this.getTouchPos(e).y, this.props.selectedColor)
+    //Mapped coords
+    let x =  this.getTouchPos(e).x
+    let y = this.getTouchPos(e).y
+    let px = this.getTouchPos(e).px
+    let py = this.getTouchPos(e).py
+    let color = this.props.selectedColor
+
+    this.pixels.push({x: x, y: y, px: px, py: py, color: color, timestamp: Date.now()})    
+    this.draw(this.ctx, x, y, 5*this.ratio, color)
+    this.socket.emit('draw', {x: Math.floor(px*64/this.width), y: Math.floor(py*64/this.width), color: color})
     e.preventDefault()
   }
 
@@ -76,13 +85,38 @@ class Grids extends React.Component {
 	}
 
   componentDidMount(props) {
-    let canvas = ReactDOM.findDOMNode(this)
-    console.log("dom", canvas)
-    canvas.addEventListener('touchstart', this.touchStart, false);
-    canvas.addEventListener('touchmove', this.touchMove, false);
+    this.canvas = ReactDOM.findDOMNode(this)
+    this.ctx = this.canvas.getContext('2d')
+
+    this.canvas.addEventListener('touchstart', this.touchStart, false);
+    this.canvas.addEventListener('touchmove', this.touchMove, false);
+    this.canvas.addEventListener('touchend', this.touchEnd, false);
+
+    this.width = this.canvas.width
+    this.height = this.canvas.height
+    this.styleWidth = parseInt(this.canvas.style.width.split(/ /)[0].replace(/[^\d]/g, ''))
+    this.styleHeight = parseInt(this.canvas.style.height.split(/ /)[0].replace(/[^\d]/g, ''))
+    this.ratio = this.width/this.styleWidth
+
+    this.socket = io.connect()
+    this.socket.onerror = function (error) {
+      console.error('There was an un-identified Web Socket error', error)
+    }
   }
 
-	shouldComponentUpdate(nextProps, nextState) {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.orientation != this.props.orientation) {
+      this.ctx.translate(this.width/2, this.height/2)
+      this.ctx.rotate(-90*Math.PI/180)
+      this.ctx.translate(-this.width/2, -this.height/2)
+    }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.clear != this.props.clear) {
+      this.socket.emit('reset')
+      this.ctx.clearRect(0, 0, this.width, this.height)
+    }
     return false
 	}
 
@@ -94,9 +128,9 @@ class Grids extends React.Component {
 			height = width
 		}
 
-		const surface = ( 
-			<Surface width = { width } height = { height } className={'rotate-left-' + this.props.orientation}>
-			</Surface>
+		const surface = (
+		  <Surface width = { width } height = { height } className={'canvas'}>
+		  </Surface>
     )
 		
     return surface
@@ -106,7 +140,8 @@ class Grids extends React.Component {
 const mapStateToProps = (state) => {
   return {
     orientation: state.orientation,
-    selectedColor: state.selectedColor
+    selectedColor: state.selectedColor,
+    clear: state.clear
   }
 }
 

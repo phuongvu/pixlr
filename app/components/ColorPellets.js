@@ -42,6 +42,9 @@ const ColorPellets = ({ onClick, selectedColor }) => (
         selected={ selectedColor === color.hex ? true : false }
       />
     )}
+    <IconButton touch={true} onClick={() => onClick('rainbow')} className={selectedColor === 'rainbow' ? 'selected' : ''}>
+      <ImageLooks color={Colors.blueGrey50} className={'rainbow'} />
+    </IconButton>
   </div>
 )
 

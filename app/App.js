@@ -1,42 +1,19 @@
-'use strict';
-
 import React, { Component } from 'react'
-import ReactArt from 'react-art'
-import _ from 'lodash'
-import io from 'socket.io-client'
-
 import AppBarMenu from './components/AppBarMenu'
 
-import RaisedButton from 'material-ui/lib/raised-button'
 import OrientationChange from './containers/OrientationChange'
 import ColorSelector from './containers/ColorSelector'
 import GridBoard from './components/GridBoard'
+import Pictionary from './containers/Pictionary'
 
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
-
-var socket = io.connect()
-
-socket.onerror = function (error) {
-  console.error('There was an un-identified Web Socket error', error)
-};
-
 
 export default class App extends Component {
 
 	constructor() {
     super()
-    this.reset = this.reset.bind(this)
-    this.randomize = this.randomize.bind(this)
   }
-	
-	reset() {
-		socket.emit('reset', {data: 0})
-	}
-
-	randomize() {
-		socket.emit('randomize', {data: 0})
-	}
 
 	render() {
 		return (
@@ -65,6 +42,9 @@ export default class App extends Component {
 					<div className="col-xs-6 col-md-6">
 						<RaisedButton style={{margin: 10}} secondary={true} onTouchTap={ this.randomize } label="Surprise me!" />
 					</div>
+				</div>
+				<div className="row">
+					<Pictionary />
 				</div>
 			</div>
 		)
