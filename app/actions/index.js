@@ -2,13 +2,11 @@ import * as types from '../constants/ActionTypes'
 
 let nextActionId = 0
 
-export const draw = (pixel) => {
+export const draw = (pixels) => {
 	return { 
 		id: nextActionId++,
 		type: types.DRAW,
-		x: pixel.x,
-		y: pixel.y,
-		color: pixel.color 
+		pixels
 	}
 }
 

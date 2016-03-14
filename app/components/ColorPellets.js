@@ -1,6 +1,9 @@
 import React from 'react'
 import Colors from 'material-ui/lib/styles/colors'
+import IconButton from 'material-ui/lib/icon-button'
+import ImageLooks from 'material-ui/lib/svg-icons/image/looks'
 import ColorPellet from './ColorPellet'
+var SimplexNoise = require('simplex-noise')
 
 const colors = [
 {

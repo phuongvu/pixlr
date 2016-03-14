@@ -1,8 +1,6 @@
 import React from 'react';
 import { getDimensions, subscribeResize, unsubscribeResize } from '../utils/DisplayHelper';
 import { Surface } from 'react-art'
-import Grid from './Grid'
-import GridTile from './GridTile'
 import { connect } from 'react-redux'
 import { rotate } from '../actions'
 import ReactDOM from 'react-dom'
@@ -18,13 +16,15 @@ class Grids extends React.Component {
     this.setDisplayDimensions = this.setDisplayDimensions.bind(this)
     this.touchStart = this.touchStart.bind(this)
     this.touchMove = this.touchMove.bind(this)
+    this.touchEnd = this.touchEnd.bind(this)
     this.getTouchPos = this.getTouchPos.bind(this)
+    this.pixels = []
 	}
 
-  draw(ctx, x, y, color) {
+  draw(ctx, x, y, size, color) {
     ctx.fillStyle = color
     ctx.beginPath()
-    ctx.arc(x, y, 10, 0, Math.PI*2, true)
+    ctx.arc(x, y, size, 0, Math.PI*2, true)
     ctx.closePath()
     ctx.fill()
   }
@@ -56,15 +56,45 @@ class Grids extends React.Component {
     e.preventDefault()
   }
 
+  touchEnd(e) {
+    this.props.ontouch(this.pixels);
+  }
+
   getTouchPos(e) {
-    console.log("e", e, e.touches);
     if (e.touches) {
       if (e.touches.length === 1) { // Only deal with one finger
-        var touch = e.targetTouches[0] // Get the information for finger #1
-        console.log("x, y", touch.pageX - touch.target.offsetLeft, touch.screenY - touch.target.offsetTop);
-        return {
-          x: (touch.clientX - touch.target.offsetLeft)*3,
-          y: (touch.clientY - touch.target.offsetTop)*3
+        let touch = e.targetTouches[0] // Get the information for finger #1
+        let x = touch.clientX - touch.target.offsetLeft
+        let y = touch.clientY - touch.target.offsetTop
+        switch(this.props.orientation) {
+          case 1:
+            return {
+              px: x*this.ratio,
+              py: y*this.ratio,
+              x: (this.width/this.ratio - y)*this.ratio,
+              y: x*this.ratio
+            }
+          case 2:
+            return {
+              px: x*this.ratio,
+              py: y*this.ratio,
+              x: (this.width/this.ratio - x)*this.ratio,
+              y: (this.width/this.ratio - y)*this.ratio
+            }
+          case 3:
+            return {
+              px: x*this.ratio,
+              py: y*this.ratio,
+              x: y*this.ratio,
+              y: (this.width/this.ratio - x)*this.ratio
+            }
+          default:
+            return {
+              px: x*this.ratio,
+              py: y*this.ratio,
+              x: x*this.ratio,
+              y: y*this.ratio
+            }
         }
       }
     }
@@ -118,7 +148,7 @@ class Grids extends React.Component {
       this.ctx.clearRect(0, 0, this.width, this.height)
     }
     return false
-	}
+  }
 
 	render() {
 		let width = this.state.dimensions.width
@@ -145,6 +175,14 @@ const mapStateToProps = (state) => {
   }
 }
 
-const GridBoard = connect(mapStateToProps)(Grids)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    ontouch: (pixel) => {
+      dispatch(draw(pixel))
+    }
+  }
+}
+
+const GridBoard = connect(mapStateToProps, mapDispatchToProps)(Grids)
 
 export default GridBoard;

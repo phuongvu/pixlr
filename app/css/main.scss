@@ -20,6 +20,13 @@ html, body {
   user-select: none;
 }
 
+.canvas {
+  border: thin solid white;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
 .align-center {
 	display: flex;
 	align-items: center; 
@@ -45,28 +52,27 @@ html, body {
   border-radius: 50%;
 }
 
-.rotate-left-1 {
-  -webkit-transform: rotate(-90deg);
-  -moz-transform: rotate(-90deg);
-  -o-transform: rotate(-90deg);
-  -ms-transform: rotate(-90deg);
-  transform: rotate(-90deg);
-}
+.rainbow {
+    background: #009688;
+    background: -moz-linear-gradient( top ,
+        rgba(255, 0, 0, 1) 0%,
+        rgba(255, 255, 0, 1) 15%,
+        rgba(0, 255, 0, 1) 30%,
+        rgba(0, 255, 255, 1) 50%,
+        rgba(0, 0, 255, 1) 65%,
+        rgba(255, 0, 255, 1) 80%,
+        rgba(255, 0, 0, 1) 100%);
+    background: -webkit-gradient(linear,  left top,  left bottom, 
+        color-stop(0%, rgba(255, 0, 0, 1)), 
+        color-stop(15%, rgba(255, 255, 0, 1)),
+        color-stop(30%, rgba(0, 255, 0, 1)),
+        color-stop(50%, rgba(0, 255, 255, 1)),
+        color-stop(65%, rgba(0, 0, 255, 1)),
+        color-stop(80%, rgba(255, 0, 255, 1)),
+        color-stop(100%, rgba(255, 0, 0, 1)));
 
-.rotate-left-2 {
-  -webkit-transform: rotate(-180deg);
-  -moz-transform: rotate(-180deg);
-  -o-transform: rotate(-180deg);
-  -ms-transform: rotate(-180deg);
-  transform: rotate(-180deg);
-}
-
-.rotate-left-3 {
-  -webkit-transform: rotate(-270deg);
-  -moz-transform: rotate(-270deg);
-  -o-transform: rotate(-270deg);
-  -ms-transform: rotate(-270deg);
-  transform: rotate(-270deg);
+  border: thin solid transparent;
+  border-radius: 50%;
 }
 
 .pictionary {
