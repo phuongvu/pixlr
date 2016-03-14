@@ -15,7 +15,7 @@ const iconStyles = {
 	}
 }
 
-const ColorPellet = ({ onClick, selected, color}) => (
+const ColorPellet = ({ onClick, selected, color }) => (
 	<IconButton touch={true} onClick={onClick} className={selected ? 'selected' : ''}>
       <Lens color={color} />
   </IconButton>

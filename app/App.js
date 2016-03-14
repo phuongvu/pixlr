@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import ReactArt from 'react-art'
 import _ from 'lodash'
 import io from 'socket.io-client'
+import ReactDOM from 'react-dom'
 
 import AppBarMenu from './components/AppBarMenu'
 

@@ -22,6 +22,13 @@ body {
   user-select: none;
 }
 
+.canvas {
+  border: thin solid white;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
 .align-center {
 	display: flex;
 	align-items: center; 
@@ -34,8 +41,7 @@ body {
 
 .title {
 	font-family: halloSans;
-	font-size: 3rem;
-	border: thin solid white;
+	font-size: 3.5rem;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 0.5rem;
@@ -72,4 +78,27 @@ body {
   -o-transform: rotate(-270deg);
   -ms-transform: rotate(-270deg);
   transform: rotate(-270deg);
+}
+
+.rainbow {
+    background: #009688;
+    background: -moz-linear-gradient( top ,
+        rgba(255, 0, 0, 1) 0%,
+        rgba(255, 255, 0, 1) 15%,
+        rgba(0, 255, 0, 1) 30%,
+        rgba(0, 255, 255, 1) 50%,
+        rgba(0, 0, 255, 1) 65%,
+        rgba(255, 0, 255, 1) 80%,
+        rgba(255, 0, 0, 1) 100%);
+    background: -webkit-gradient(linear,  left top,  left bottom, 
+        color-stop(0%, rgba(255, 0, 0, 1)), 
+        color-stop(15%, rgba(255, 255, 0, 1)),
+        color-stop(30%, rgba(0, 255, 0, 1)),
+        color-stop(50%, rgba(0, 255, 255, 1)),
+        color-stop(65%, rgba(0, 0, 255, 1)),
+        color-stop(80%, rgba(255, 0, 255, 1)),
+        color-stop(100%, rgba(255, 0, 0, 1)));
+
+  border: thin solid transparent;
+  border-radius: 50%;
 }
