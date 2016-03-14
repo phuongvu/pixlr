@@ -20,10 +20,10 @@ class Grids extends React.Component {
     this.pixels = []
 	}
 
-  draw(ctx, x, y, color) {
+  draw(ctx, x, y, size, color) {
     ctx.fillStyle = color
     ctx.beginPath()
-    ctx.arc(x, y, 10, 0, Math.PI*2, true)
+    ctx.arc(x, y, size, 0, Math.PI*2, true)
     ctx.closePath()
     ctx.fill()
   }
@@ -38,7 +38,7 @@ class Grids extends React.Component {
     let color = this.props.selectedColor
 
     this.pixels.push({x: x, y: y, px: px, py: py, color: color, timestamp: Date.now()})
-    this.draw(ctx, x, y, color)
+    this.draw(ctx, x, y, 5*this.ratio, color)
     e.preventDefault()
   }
 
@@ -53,7 +53,7 @@ class Grids extends React.Component {
     let color = this.props.selectedColor
 
     this.pixels.push({x: x, y: y, px: px, py: py, color: color, timestamp: Date.now()})    
-    this.draw(ctx, x, y, color)
+    this.draw(ctx, x, y, 5*this.ratio, color)
     e.preventDefault()
   }
 
@@ -62,7 +62,6 @@ class Grids extends React.Component {
   }
 
   getTouchPos(e) {
-    let canvas = ReactDOM.findDOMNode(this)
     if (e.touches) {
       if (e.touches.length === 1) { // Only deal with one finger
         let touch = e.targetTouches[0] // Get the information for finger #1
@@ -71,31 +70,31 @@ class Grids extends React.Component {
         switch(this.props.orientation) {
           case 1:
             return {
-              px: x*3,
-              py: y*3,
-              x: (canvas.width/3 - y)*3,
-              y: x*3
+              px: x*this.ratio,
+              py: y*this.ratio,
+              x: (this.width/this.ratio - y)*this.ratio,
+              y: x*this.ratio
             }
           case 2:
             return {
-              px: x*3,
-              py: y*3,
-              x: (canvas.width/3 - x)*3,
-              y: (canvas.width/3 - y)*3
+              px: x*this.ratio,
+              py: y*this.ratio,
+              x: (this.width/ratio - x)*this.ratio,
+              y: (this.width/ratio - y)*this.ratio
             }
           case 3:
             return {
-              px: x*3,
-              py: y*3,
-              x: y*3,
-              y: (canvas.width/3 - x)*3
+              px: x*this.ratio,
+              py: y*this.ratio,
+              x: y*this.ratio,
+              y: (this.width/this.ratio - x)*this.ratio
             }
           default:
             return {
-              px: x*3,
-              py: y*3,
-              x: x*3,
-              y: y*3
+              px: x*this.ratio,
+              py: y*this.ratio,
+              x: x*this.ratio,
+              y: y*this.ratio
             }
         }
       }
@@ -121,6 +120,12 @@ class Grids extends React.Component {
     canvas.addEventListener('touchstart', this.touchStart, false);
     canvas.addEventListener('touchmove', this.touchMove, false);
     canvas.addEventListener('touchend', this.touchEnd, false);
+
+    let width = this.width = canvas.width
+    let height = this.height = canvas.height
+    let styleWidth = parseInt(canvas.style.width.split(/ /)[0].replace(/[^\d]/g, ''))
+    let styleHeight = parseInt(canvas.style.height.split(/ /)[0].replace(/[^\d]/g, ''))
+    this.ratio = width/styleWidth
   }
 
   componentWillReceiveProps(nextProps) {
