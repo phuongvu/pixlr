@@ -1,11 +1,13 @@
-import React from 'react';
-import { getDimensions, subscribeResize, unsubscribeResize } from '../utils/DisplayHelper';
+import React from 'react'
+import { getDimensions, subscribeResize, unsubscribeResize } from '../utils/DisplayHelper'
 import { Surface } from 'react-art'
 import { connect } from 'react-redux'
 import { rotate } from '../actions'
 import ReactDOM from 'react-dom'
 import { draw } from '../actions'
 import io from 'socket.io-client'
+import Marker from './Marker'
+import Hammer from 'react-hammerjs'
 
 class Grids extends React.Component {
 	constructor() {
@@ -18,8 +20,19 @@ class Grids extends React.Component {
     this.touchMove = this.touchMove.bind(this)
     this.touchEnd = this.touchEnd.bind(this)
     this.getTouchPos = this.getTouchPos.bind(this)
+    this.setMarker = this.setMarker.bind(this)
     this.pixels = []
 	}
+
+  setMarker(ctx, color) {
+    ctx.fillStyle = color
+    ctx.beginPath()
+    ctx.moveTo(0, 0)
+    ctx.lineTo(0, 50)
+    ctx.lineTo(50, 0)
+    ctx.closePath()
+    ctx.fill()
+  }
 
   draw(ctx, x, y, size, color) {
     ctx.fillStyle = color
@@ -37,8 +50,8 @@ class Grids extends React.Component {
     let color = this.props.selectedColor
 
     this.pixels.push({x: x, y: y, px: px, py: py, color: color, timestamp: Date.now()})
-    this.draw(this.ctx, x, y, 5*this.ratio, color)
-    this.socket.emit('draw', {x: Math.floor(px*64/this.width), y: Math.floor(py*64/this.width), color: color})
+    this.draw(this.ctx, x, y, this.brushSize, color)
+    this.socket.emit('draw', {x: Math.floor(x*64/this.width), y: Math.floor(y*64/this.width), color: color})
     e.preventDefault()
   }
 
@@ -51,8 +64,8 @@ class Grids extends React.Component {
     let color = this.props.selectedColor
 
     this.pixels.push({x: x, y: y, px: px, py: py, color: color, timestamp: Date.now()})    
-    this.draw(this.ctx, x, y, 5*this.ratio, color)
-    this.socket.emit('draw', {x: Math.floor(px*64/this.width), y: Math.floor(py*64/this.width), color: color})
+    this.draw(this.ctx, x, y, this.brushSize, color)
+    this.socket.emit('draw', {x: Math.floor(x*64/this.width), y: Math.floor(y*64/this.width), color: color})
     e.preventDefault()
   }
 
@@ -67,27 +80,6 @@ class Grids extends React.Component {
         let x = touch.clientX - touch.target.offsetLeft
         let y = touch.clientY - touch.target.offsetTop
         switch(this.props.orientation) {
-          case 1:
-            return {
-              px: x*this.ratio,
-              py: y*this.ratio,
-              x: (this.width/this.ratio - y)*this.ratio,
-              y: x*this.ratio
-            }
-          case 2:
-            return {
-              px: x*this.ratio,
-              py: y*this.ratio,
-              x: (this.width/this.ratio - x)*this.ratio,
-              y: (this.width/this.ratio - y)*this.ratio
-            }
-          case 3:
-            return {
-              px: x*this.ratio,
-              py: y*this.ratio,
-              x: y*this.ratio,
-              y: (this.width/this.ratio - x)*this.ratio
-            }
           default:
             return {
               px: x*this.ratio,
@@ -127,18 +119,21 @@ class Grids extends React.Component {
     this.styleWidth = parseInt(this.canvas.style.width.split(/ /)[0].replace(/[^\d]/g, ''))
     this.styleHeight = parseInt(this.canvas.style.height.split(/ /)[0].replace(/[^\d]/g, ''))
     this.ratio = this.width/this.styleWidth
+    this.brushSize = 8*this.ratio
 
     this.socket = io.connect()
     this.socket.onerror = function (error) {
       console.error('There was an un-identified Web Socket error', error)
     }
+
+    //Draw marker
+    this.socket.emit('render')
+    this.setMarker(this.ctx, '#f44336')
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.orientation != this.props.orientation) {
-      this.ctx.translate(this.width/2, this.height/2)
-      this.ctx.rotate(-90*Math.PI/180)
-      this.ctx.translate(-this.width/2, -this.height/2)
+      this.socket.emit('rotate', {orientation: nextProps.orientation})
     }
   }
 
@@ -146,6 +141,7 @@ class Grids extends React.Component {
     if (nextProps.clear != this.props.clear) {
       this.socket.emit('reset')
       this.ctx.clearRect(0, 0, this.width, this.height)
+      this.setMarker(this.ctx, '#f44336')
     }
     return false
   }

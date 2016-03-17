@@ -23,7 +23,7 @@ export default class App extends Component {
 					ARTable
 				</div>
 				<div className="row sketchpad__title align-center">
-					Sketch pad
+					Sketchpad
 				</div>
 				<div className="row">
 					<GridBoard />

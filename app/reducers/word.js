@@ -7,7 +7,7 @@ const getRandomIntInclusive = (min, max) => {
 }
 
 const randomWord = () => {
-	return words[getRandomIntInclusive(0, words.length)]
+	return words[getRandomIntInclusive(0, words.length - 1)]
 }
 
 const initialState = randomWord()
