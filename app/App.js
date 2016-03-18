@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
-import AppBarMenu from './components/AppBarMenu'
-
 import OrientationChange from './containers/OrientationChange'
 import Clear from './containers/Clear'
 import ColorSelector from './containers/ColorSelector'
-import GridBoard from './components/GridBoard'
+import HammerWrapper from './components/HammerWrapper'
 import Pictionary from './containers/Pictionary'
-
 import injectTapEventPlugin from 'react-tap-event-plugin'
+
 injectTapEventPlugin()
 
 export default class App extends Component {
@@ -26,7 +24,7 @@ export default class App extends Component {
 					Sketchpad
 				</div>
 				<div className="row">
-					<GridBoard />
+					<HammerWrapper />
 				</div>
 				<div className="row color-selector">
 					<div className="row color-selector__title align-center">

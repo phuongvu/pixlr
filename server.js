@@ -143,6 +143,7 @@ io.on('connection', function(socket) {
 
   socket.on('reset', function() {
     matrix.clear();
+    pixels = [];
     setMarker();
   });
 
@@ -153,7 +154,19 @@ io.on('connection', function(socket) {
     _.map(pixels, function(coord) {
       draw(coord);
     });
+  });
+
+  socket.on('press', function(data) {
+    console.log("press", data);
+  });
+
+  socket.on('doubleTap', function(data) {
+    console.log("doubleTap", data);
   });  
+
+  socket.on('swipe', function(data) {
+    console.log("swipe", data);
+  });
 
   socket.on('disconnect', function(){
     console.log('user disconnected');
@@ -164,15 +177,8 @@ server.listen(port, function () {
   debug('Server listening at port %d', port);
 });
 
-
-// r.db('test').table("posts").insert({
-//     id: 1,
-//     title: "Lorem ipsum",
-//     content: "Dolor sit amet"
-// }).run();
-
 client.on("error", function (err) {
-    console.log("Error " + err);
+  console.log("Error " + err);
 });
 
 process.on('SIGINT', function () {

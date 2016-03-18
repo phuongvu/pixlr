@@ -7,7 +7,6 @@ import ReactDOM from 'react-dom'
 import { draw } from '../actions'
 import io from 'socket.io-client'
 import Marker from './Marker'
-import Hammer from 'react-hammerjs'
 
 class Grids extends React.Component {
 	constructor() {
