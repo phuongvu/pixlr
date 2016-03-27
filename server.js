@@ -3,22 +3,21 @@ var express = require('express')
   , bodyParser = require('body-parser')
 	, app = express()
 	, server = require('http').createServer(app)
-	, mongoose = require('./lib/mongoose.js')
 	, io = require('socket.io')(server)
-  , gm = require('gm').subClass({imageMagick: true})
-  , LedMatrix = require('node-rpi-rgb-led-matrix')
   , debug = require('debug')('admin:app')
   , morgan = require('morgan')
   , path = require('path')
   , eddystoneBeacon = require('eddystone-beacon')
   , r = require('rethinkdbdash')()
   , redis = require('redis')
-  , bluebird = require('bluebird')
+  , Promise = require('bluebird')
   , _ = require('lodash')
+  , utils = require('./lib/utils')
+  , LedMatrix = require('node-rpi-rgb-led-matrix')
   ;
 
-bluebird.promisifyAll(redis.RedisClient.prototype);
-bluebird.promisifyAll(redis.Multi.prototype);
+Promise.promisifyAll(redis.RedisClient.prototype);
+Promise.promisifyAll(redis.Multi.prototype);
 
 var client = redis.createClient();
 var pixels = [];
@@ -32,23 +31,13 @@ const webpack = require('webpack')
 const isDeveloping = process.env.NODE_ENV !== 'production';
 const port = isDeveloping ? 3000 : process.env.PORT;
 
-var SimplexNoise = require('simplex-noise'),
-    simplex = new SimplexNoise(Math.random),
-    d = new Date();
+var d = new Date();
 
-var hexToRgbConverter = function(hex) {
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
-  } : null;
-}
-
+//Preping the LED matrix
 var matrix = new LedMatrix(32, 1, 1, 100);
 
 var setMarker = function() {
-  var rgb = hexToRgbConverter("#f44336");
+  var rgb = utils.hexToRgbConverter("#f44336");
   for (var y = 0; y <= 2; y++) {
     for (var x = 0; x <= 2 - y; x++) {
       matrix.setPixel(x, y, rgb.r, rgb.g, rgb.b);
@@ -110,24 +99,17 @@ function draw(coord) {
 
   if(color === 'rainbow') {
     var t = d.getSeconds();
-    var r = Math.floor(simplex.noise3D(x/8, y/8, t/16) * 255);
-    var g = Math.floor(simplex.noise3D(x/16, y/16, t/16) * 255);
-    var b = Math.floor(simplex.noise3D(x/32, y/32, t/16) * 255);
-    rgb = {
-      r: r,
-      g: g,
-      b: b
-    } 
+    rgb = utils.randomRGB(x, y, t);
   } else {
-    rgb = hexToRgbConverter(coord.color)
+    rgb = utils.hexToRgbConverter(coord.color)
   }
 
   if(x < 64 && y < 64) {
-    matrix.setPixel(coord.x, coord.y, rgb.r, rgb.g, rgb.b);
-    matrix.setPixel(coord.x - 1, coord.y, rgb.r, rgb.g, rgb.b);
-    matrix.setPixel(coord.x, coord.y - 1, rgb.r, rgb.g, rgb.b);
-    matrix.setPixel(coord.x, coord.y + 1, rgb.r, rgb.g, rgb.b);
-    matrix.setPixel(coord.x + 1, coord.y, rgb.r, rgb.g, rgb.b);
+    matrix.setPixel(x, y, rgb.r, rgb.g, rgb.b);
+    matrix.setPixel(x - 1, y, rgb.r, rgb.g, rgb.b);
+    matrix.setPixel(x, y - 1, rgb.r, rgb.g, rgb.b);
+    matrix.setPixel(x, y + 1, rgb.r, rgb.g, rgb.b);
+    matrix.setPixel(x + 1, y, rgb.r, rgb.g, rgb.b);
   }
 }
 

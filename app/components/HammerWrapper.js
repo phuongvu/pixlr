@@ -6,7 +6,6 @@ import { rotate } from '../actions'
 import ReactDOM from 'react-dom'
 import { draw } from '../actions'
 import io from 'socket.io-client'
-import Marker from './Marker'
 import Hammer from 'react-hammerjs'
 import GridBoard from './GridBoard'
 
@@ -22,19 +21,19 @@ class HammerWrapper extends React.Component {
 	calculateCoord(p) {
 		let ratio = p.target.width/p.target.offsetWidth
 		return {
-			x: (p.center.x - p.target.offsetLeft)*ratio,
-			y: (p.center.y - p.target.offsetTop)*ratio
+			x: (p.center.x - p.target.offsetLeft)*ratio*64/p.target.width,
+			y: (p.center.y - p.target.offsetTop)*ratio*64/p.target.width
 		}
 	}
 
 	handlePress(e) {
 		let coord = this.calculateCoord(arguments[0])
-		this.socket.emit('press', { coord: coord, delta: arguments[0].deltaTime })
+		this.socket.emit('press', coord)
 	}
 
 	handleDoubleTap(e) {
 		let coord = this.calculateCoord(arguments[0])
-		this.socket.emit('doubleTap', { coord: coord })
+		this.socket.emit('doubleTap', coord)
 	}
 
 	handleSwipe(e) {

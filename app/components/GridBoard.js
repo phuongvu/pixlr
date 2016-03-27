@@ -6,7 +6,6 @@ import { rotate } from '../actions'
 import ReactDOM from 'react-dom'
 import { draw } from '../actions'
 import io from 'socket.io-client'
-import Marker from './Marker'
 
 class Grids extends React.Component {
 	constructor() {
