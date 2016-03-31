@@ -5,11 +5,10 @@ import { connect } from 'react-redux'
 import { rotate } from '../actions'
 import ReactDOM from 'react-dom'
 import { draw } from '../actions'
-import io from 'socket.io-client'
 
 class Grids extends React.Component {
-	constructor() {
-		super()
+	constructor(props) {
+		super(props)
     this.state = {
     	dimensions: getDimensions()
     }
@@ -19,6 +18,7 @@ class Grids extends React.Component {
     this.touchEnd = this.touchEnd.bind(this)
     this.getTouchPos = this.getTouchPos.bind(this)
     this.setMarker = this.setMarker.bind(this)
+    this.socket = props.socket
     this.pixels = []
 	}
 
@@ -119,7 +119,6 @@ class Grids extends React.Component {
     this.ratio = this.width/this.styleWidth
     this.brushSize = 8*this.ratio
 
-    this.socket = io.connect()
     this.socket.onerror = function (error) {
       console.error('There was an un-identified Web Socket error', error)
     }

@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { rotate } from '../actions'
 import ReactDOM from 'react-dom'
 import { draw } from '../actions'
-import io from 'socket.io-client'
 import Hammer from 'react-hammerjs'
 import GridBoard from './GridBoard'
 
@@ -16,6 +15,8 @@ class HammerWrapper extends React.Component {
 		this.handleDoubleTap = this.handleDoubleTap.bind(this)
 		this.handleSwipe = this.handleSwipe.bind(this)
 		this.calculateCoord = this.calculateCoord.bind(this)
+		this.socket = props.socket
+		console.log("props", props.socket, this.socket);
 	}
 
 	calculateCoord(p) {
@@ -41,7 +42,6 @@ class HammerWrapper extends React.Component {
 	}
 
 	componentDidMount(props) {
-		this.socket = io.connect()
     this.socket.onerror = function (error) {
       console.error('There was an un-identified Web Socket error', error)
     }
@@ -63,7 +63,7 @@ class HammerWrapper extends React.Component {
 							onDoubleTap={this.handleDoubleTap}
 							options={this.options} 
 							vertical={true} >
-				<GridBoard />
+				<GridBoard socket={ this.socket } />
 			</Hammer>
 		)
 	}

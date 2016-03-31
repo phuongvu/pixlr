@@ -8,7 +8,6 @@ var express = require('express')
   , morgan = require('morgan')
   , path = require('path')
   , eddystoneBeacon = require('eddystone-beacon')
-  , r = require('rethinkdbdash')()
   , redis = require('redis')
   , Promise = require('bluebird')
   , _ = require('lodash')
@@ -16,10 +15,6 @@ var express = require('express')
   , LedMatrix = require('node-rpi-rgb-led-matrix')
   ;
 
-Promise.promisifyAll(redis.RedisClient.prototype);
-Promise.promisifyAll(redis.Multi.prototype);
-
-var client = redis.createClient();
 var pixels = [];
 
 const webpack = require('webpack')
@@ -29,12 +24,12 @@ const webpack = require('webpack')
       ;
 
 const isDeveloping = process.env.NODE_ENV !== 'production';
-const port = isDeveloping ? 3000 : process.env.PORT;
+const port = isDeveloping ? 80 : process.env.PORT;
 
 var d = new Date();
 
 //Preping the LED matrix
-var matrix = new LedMatrix(32, 1, 1, 100);
+var matrix = new LedMatrix(32, 4, 1, 100, true);
 
 var setMarker = function() {
   var rgb = utils.hexToRgbConverter("#f44336");
@@ -56,7 +51,7 @@ var options = {
   tlmPeriod: 10      // every 10 advertisements
 };
 
-eddystoneBeacon.advertiseUrl(url, options);
+// eddystoneBeacon.advertiseUrl(url, options);
 
 if (isDeveloping) {
   const compiler = webpack(config);
@@ -118,49 +113,88 @@ io.on('connection', function(socket) {
 
   debug("socket id", socket.client.id, io.engine.clientsCount);
 
+  pixels.push({id: socket.client.id, coords: []});
+
+  //Pixels: [{id: "socketId", coords: []}]
+
   socket.on('draw', function(coord) {
-    pixels.push(coord);
+    console.log("draw", pixels, socket.client.id);
+    var clientCoords = _.find(pixels, {id: socket.client.id});
+    clientCoords.coords.push(coord);
     draw(coord);
   });
 
   socket.on('reset', function() {
-    matrix.clear();
-    pixels = [];
-    setMarker();
+    console.log("reset", pixels);
+
+    var clientCoords = _.find(pixels, {id: socket.client.id});
+    if(!_.isEmpty(clientCoords)) {
+      _.map(clientCoords.coords, function(coord) {
+        matrix.setPixel(coord.x, coord.y, 0, 0, 0);
+      });
+      clientCoords.coords = []
+    }
   });
 
   socket.on('rotate', function(data) {
     matrix.clear();
     matrix.rotate(data.orientation*90);
     setMarker();
-    _.map(pixels, function(coord) {
-      draw(coord);
+    _.map(pixels, function(clientCoord) {
+      _.map(clientCoords.coords, function(coord) {
+        draw(coord);
+      });
     });
   });
 
   socket.on('press', function(data) {
     console.log("press", data);
+    var cx = data.x;
+    var cy = data.y;
+    color = data.color;
+    var sweep = 64;
+
+    _.times(sweep, function(r) {
+      _.times(sweep, function(h) {
+        var x = Math.floor(cx + r*Math.sin(h*2*Math.PI/sweep));
+        var y = Math.floor(cy + r*Math.cos(h*2*Math.PI/sweep));
+        var rgb = utils.randomRGB(data.x, data.y, r);
+        matrix.setPixel(x, y, rgb.r, rgb.g, rgb.b);
+      })
+    })
+
+    _.map(pixels, function(clientCoords) {
+      _.map(clientCoords.coords, function(coord) {
+        draw(coord);
+      });
+    });
+    setMarker();
   });
 
   socket.on('doubleTap', function(data) {
     console.log("doubleTap", data);
-  });  
-
-  socket.on('swipe', function(data) {
-    console.log("swipe", data);
   });
 
   socket.on('disconnect', function(){
-    console.log('user disconnected');
+    debug('user disconnected');
+
+    _.map(_.find(pixels, {id: socket.client.id}).coords, function(coord) {
+      matrix.setPixel(coord.x, coord.y, 0, 0, 0);
+    });
+
+    _.remove(pixels, function(item) {
+      return item.id === socket.client.id;
+    });
+    console.log("disconnected", pixels);
+  });
+
+  socket.on('error', function(e){
+    debug('error', e);
   });
 });
 
 server.listen(port, function () {
   debug('Server listening at port %d', port);
-});
-
-client.on("error", function (err) {
-  console.log("Error " + err);
 });
 
 process.on('SIGINT', function () {

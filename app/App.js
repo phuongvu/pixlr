@@ -5,8 +5,11 @@ import ColorSelector from './containers/ColorSelector'
 import HammerWrapper from './components/HammerWrapper'
 import Pictionary from './containers/Pictionary'
 import injectTapEventPlugin from 'react-tap-event-plugin'
+import io from 'socket.io-client'
 
 injectTapEventPlugin()
+
+let socket = io.connect();
 
 export default class App extends Component {
 
@@ -20,16 +23,10 @@ export default class App extends Component {
 				<div className="row title align-center">
 					ARTable
 				</div>
-				<div className="row sketchpad__title align-center">
-					Sketchpad
-				</div>
 				<div className="row">
-					<HammerWrapper />
+					<HammerWrapper socket={ socket } />
 				</div>
 				<div className="row color-selector">
-					<div className="row color-selector__title align-center">
-						Select a color
-					</div>
 					<div className="row color-selector__pellets align-center">
 						<ColorSelector />
 					</div>
