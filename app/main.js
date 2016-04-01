@@ -6,7 +6,6 @@ import configureStore from './store/configureStore'
 
 import './bower_components/bootstrap/dist/css/bootstrap.min.css'
 import './css/main.scss'
-import 'json!./manifest.json'
 
 const store = configureStore()
 

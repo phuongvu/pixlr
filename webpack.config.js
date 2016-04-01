@@ -43,8 +43,12 @@ module.exports = {
       include: path.join(__dirname, 'app')
     },
     {
-      test: /\.(png|svg)$/, 
+      test: /\.(png)$/, 
       loader: 'url-loader?limit=100000'
+    },
+    {
+      test: /\.svg$/, 
+      loader: 'svg-url-loader'
     },
     {
       test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/, 

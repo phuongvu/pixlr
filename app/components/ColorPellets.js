@@ -8,31 +8,31 @@ var SimplexNoise = require('simplex-noise')
 const colors = [
 {
   hex: '#ff4081',
-  name: Colors.pinkA200
-},
-{
-  hex: '#9c27b0',
   name: Colors.purple500
 },
 {
+  hex: '#9c27b0',
+  name: Colors.pink400
+},
+{
   hex: '#d50000',
-  name: Colors.redA700
+  name: Colors.yellow400
 },
 {
   hex: '#4caf50',
-  name: Colors.green500
+  name: Colors.orange400
 },
 {
   hex: '#2196f3',
-  name: Colors.blue500
+  name: Colors.blueA200
 },
 {
   hex: '#ff9800',
-  name: Colors.orange500
+  name: Colors.lightGreen500
 },
 {
-  hex: '#fafafa',
-  name: Colors.grey50
+  hex: '#000000',
+  name: Colors.grey900
 }]
 
 const ColorPellets = ({ onClick, selectedColor }) => (

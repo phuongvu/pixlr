@@ -20,8 +20,19 @@ export default class App extends Component {
 	render() {
 		return (
 			<div className="container-fluid">
-				<div className="row title align-center">
-					
+				<div className="row app__header">
+					<div className="row">
+						<div className="app__logo__container">
+							<div className="app__logo">
+							</div>
+						</div>
+					</div>
+					<div className="row">
+						<div className="app__statement">
+							<span className="statement__first-line">Draw anything you want or play</span><br/>
+							<span className="statement__second-line"> a word guessing game with your friends! </span>
+						</div>
+					</div>
 				</div>
 				<div className="row">
 					<HammerWrapper socket={ socket } />
@@ -31,11 +42,11 @@ export default class App extends Component {
 						<ColorSelector />
 					</div>
 				</div>
-				<div className="row">
-					<div className="col-xs-6 col-md-6">
+				<div className="row control-buttons">
+					<div className="control-buttons__clear col-xs-6 col-md-6">
 						<Clear />
 					</div>
-					<div className="col-xs-6 col-md-6">
+					<div className="control-buttons__rotate col-xs-6 col-md-6">
 						<OrientationChange />
 					</div>
 				</div>

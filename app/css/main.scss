@@ -1,6 +1,20 @@
+$iphone5--lower: 320px;
+$iphone5--upper: 568px;
+
+$iphone6--lower: 375px;
+$iphone6--upper: 667px;
+
+$iphone6-plus--lower: 414px;
+$iphone6-plus--upper: 736px;
+
 @font-face {
-  font-family: 'halloSans';
-  src: url('../assets/hallo_sans.otf');
+  font-family: 'GothamRnd-Light';
+  src: url('../assets/fonts/GothamRnd-Light.otf');
+}
+
+@font-face {
+  font-family: 'GothamRnd-Medium';
+  src: url('../assets/fonts/GothamRnd-Medium.otf');
 }
 
 html, body {
@@ -8,7 +22,12 @@ html, body {
   height: 100%;
   overflow-x: hidden;
   color: #FAFAFA;
-  background-color: #1d2120;
+  background-color: rgb(76,77,79);
+  font-family: GothamRnd-Medium;
+}
+
+.canvas {
+  background-color: #212121;
 }
 
 #id {
@@ -20,26 +39,56 @@ html, body {
   user-select: none;
 }
 
-.canvas {
-  border: thin solid white;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-}
-
 .align-center {
 	display: flex;
 	align-items: center; 
 	justify-content: center;
 }
 
-.title {
-	font-family: halloSans;
-	font-size: 3.5rem;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 1.5rem;
-  text-decoration: underline;
+.app__header {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+
+  .app__logo__container {
+    @media screen and (min-width: $iphone5--lower) and (max-device-width: $iphone5--upper) {
+      height: 20px;
+      width: auto;
+    }
+    @media screen and (min-width: $iphone6--lower) and (max-device-width: $iphone6--upper) {
+      height: 30px;
+      width: auto;
+    }
+    @media screen and (min-width: $iphone6-plus--lower) and (max-device-width: $iphone6-plus--upper) {
+      height: 35px;
+      width: auto;
+    }
+
+    .app__logo {
+      height: 100%;
+      width: 100%;
+      background-image: url(../assets/icons/logo.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center center; 
+    }
+  }
+
+  .app__statement {
+    font-family: GothamRnd-Light;
+
+    @media screen and (min-width: $iphone5--lower) and (max-device-width: $iphone5--upper) {
+      display: none;
+    }
+    @media screen and (min-width: $iphone6--lower) and (max-device-width: $iphone6--upper) {
+      margin-top: 5px;
+      display: block;
+    }
+    @media screen and (min-width: $iphone6-plus--lower) and (max-device-width: $iphone6-plus--upper) {
+      margin-top: 10px;
+      display: block;
+    }
+  }
 }
 
 .color-selector {
@@ -52,38 +101,64 @@ html, body {
   border-radius: 50%;
 }
 
-.rainbow {
-    background: #009688;
-    background: -moz-linear-gradient( top ,
-        rgba(255, 0, 0, 1) 0%,
-        rgba(255, 255, 0, 1) 15%,
-        rgba(0, 255, 0, 1) 30%,
-        rgba(0, 255, 255, 1) 50%,
-        rgba(0, 0, 255, 1) 65%,
-        rgba(255, 0, 255, 1) 80%,
-        rgba(255, 0, 0, 1) 100%);
-    background: -webkit-gradient(linear,  left top,  left bottom, 
-        color-stop(0%, rgba(255, 0, 0, 1)), 
-        color-stop(15%, rgba(255, 255, 0, 1)),
-        color-stop(30%, rgba(0, 255, 0, 1)),
-        color-stop(50%, rgba(0, 255, 255, 1)),
-        color-stop(65%, rgba(0, 0, 255, 1)),
-        color-stop(80%, rgba(255, 0, 255, 1)),
-        color-stop(100%, rgba(255, 0, 0, 1)));
+.control-buttons .control-buttons__rotate, .control-buttons .control-buttons__clear {
+  padding-right: 10px;
+  padding-left: 10px;
 
-  border: thin solid transparent;
-  border-radius: 50%;
+  div {
+    display: flex;
+    align-items: center;
+    min-width: 100% !important;
+    border-radius: 8px !important;
+    
+    button {
+      border-radius: 8px !important;
+      span {
+        padding-left: 0 !important;
+        text-transform: none !important;
+        @media screen and (min-width: $iphone5--lower) and (max-device-width: $iphone5--upper) {
+          font-size: 1.5rem !important;
+        }
+        @media screen and (min-width: $iphone6--lower) and (max-device-width: $iphone6--upper) {
+          font-size: 1.7rem !important;
+        }
+        @media screen and (min-width: $iphone6-plus--lower) and (max-device-width: $iphone6-plus--upper) {
+          font-size: 1.7rem !important;
+        }
+      }
+
+      svg {
+        margin-left: 5px !important;
+      }
+    }
+  }
 }
 
 .pictionary {
-  margin-top: 1.5rem;  
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
 }
 
 .pictionary__title, .pictionary__words {
-  font-size: 2rem;
-  margin-left: 1.5rem;
+  @media screen and (min-width: $iphone5--lower) and (max-device-width: $iphone5--upper) {
+    font-size: 1.5rem;
+  }
+  @media screen and (min-width: $iphone6--lower) and (max-device-width: $iphone6--upper) {
+    font-size: 1.7rem;
+  }
+  @media screen and (min-width: $iphone6-plus--lower) and (max-device-width: $iphone6-plus--upper) {
+    font-size: 1.7rem;
+  }
 }
 
 .pictionary__words {
   color: pink;
+  margin-left: 0.5rem;
+}
+
+.pictionary__refresh {
+  -ms-transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
 }

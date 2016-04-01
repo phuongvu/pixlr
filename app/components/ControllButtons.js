@@ -11,5 +11,5 @@ export const RotateButton = ({onclick}) => (
 )
 
 export const ResetButton = ({onclick}) => (
-	<RaisedButton icon={<ContentClear />} primary={true} onTouchTap={ onclick } label="Clear" />
+	<RaisedButton icon={<ContentClear />} primary={true} onTouchTap={ onclick } label="Clear Artwork" />
 )
