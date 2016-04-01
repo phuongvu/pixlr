@@ -37,10 +37,8 @@ export default class App extends Component {
 				<div className="row">
 					<HammerWrapper socket={ socket } />
 				</div>
-				<div className="row color-selector">
-					<div className="row color-selector__pellets align-center">
-						<ColorSelector />
-					</div>
+				<div className="row">
+					<ColorSelector />
 				</div>
 				<div className="row control-buttons">
 					<div className="control-buttons__clear col-xs-6 col-md-6">
