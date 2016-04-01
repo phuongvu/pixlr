@@ -21,7 +21,7 @@ export default class App extends Component {
 		return (
 			<div className="container-fluid">
 				<div className="row title align-center">
-					ARTable
+					
 				</div>
 				<div className="row">
 					<HammerWrapper socket={ socket } />

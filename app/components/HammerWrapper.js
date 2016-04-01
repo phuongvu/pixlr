@@ -8,15 +8,22 @@ import { draw } from '../actions'
 import Hammer from 'react-hammerjs'
 import GridBoard from './GridBoard'
 
-class HammerWrapper extends React.Component {
+window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame       ||
+          window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame    ||
+          function( callback ){
+            window.setTimeout(callback, 1000 / 60);
+          };
+})();
+
+class Gestures extends React.Component {
 	constructor(props) {
 		super(props)
 		this.handlePress = this.handlePress.bind(this)
 		this.handleDoubleTap = this.handleDoubleTap.bind(this)
-		this.handleSwipe = this.handleSwipe.bind(this)
 		this.calculateCoord = this.calculateCoord.bind(this)
 		this.socket = props.socket
-		console.log("props", props.socket, this.socket);
 	}
 
 	calculateCoord(p) {
@@ -33,12 +40,14 @@ class HammerWrapper extends React.Component {
 	}
 
 	handleDoubleTap(e) {
+		var coords = []
 		let coord = this.calculateCoord(arguments[0])
-		this.socket.emit('doubleTap', coord)
-	}
-
-	handleSwipe(e) {
-		this.socket.emit('swipe', {deltaX: arguments[0].deltaX, deltaY: arguments[0].deltaY})
+		_.times(360, function(r) {
+      var x = Math.floor(coord.x + 3*Math.cos(r*Math.PI/180))
+      var y = Math.floor(coord.y + 3*Math.sin(r*Math.PI/180))
+      coords.push({x: x, y: y})
+    })
+		this.socket.emit('doubleTap', {color: this.props.selectedColor, coords: coords})
 	}
 
 	componentDidMount(props) {
@@ -59,7 +68,6 @@ class HammerWrapper extends React.Component {
 	render() {
 		return (
 			<Hammer onPressUp={this.handlePress}
-							onSwipe={this.handleSwipe}
 							onDoubleTap={this.handleDoubleTap}
 							options={this.options} 
 							vertical={true} >
@@ -68,5 +76,13 @@ class HammerWrapper extends React.Component {
 		)
 	}
 }
+
+const mapStateToProps = (state) => {
+  return {
+    selectedColor: state.selectedColor
+  }
+}
+
+const HammerWrapper = connect(mapStateToProps)(Gestures)
 
 export default HammerWrapper
