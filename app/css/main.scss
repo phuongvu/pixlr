@@ -27,7 +27,7 @@ html, body {
 }
 
 .canvas {
-  background-color: #212121;
+  background-color: #000000;
 }
 
 #id {
@@ -51,17 +51,16 @@ html, body {
   text-align: center;
 
   .app__logo__container {
+    width: auto;
+    
     @media screen and (min-width: $iphone5--lower) and (max-device-width: $iphone5--upper) {
       height: 20px;
-      width: auto;
     }
     @media screen and (min-width: $iphone6--lower) and (max-device-width: $iphone6--upper) {
       height: 30px;
-      width: auto;
     }
     @media screen and (min-width: $iphone6-plus--lower) and (max-device-width: $iphone6-plus--upper) {
       height: 35px;
-      width: auto;
     }
 
     .app__logo {
@@ -94,17 +93,8 @@ html, body {
   }
 }
 
-.color-selector {
-	margin-bottom: 5px;
-  font-size: 1.5rem;
-}
-
-.selected svg {
-	border: thin solid white;
-  border-radius: 50%;
-}
-
 .control-buttons .control-buttons__rotate, .control-buttons .control-buttons__clear {
+  margin-top: 5px;
   padding-right: 10px;
   padding-left: 10px;
 
@@ -172,14 +162,67 @@ html, body {
   align-items: center;
   justify-content: center;
   min-width: 100% !important;
-  height: 50px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  @media screen and (min-width: $iphone5--lower) and (max-device-width: $iphone5--upper) {
+    height: 30px;
+    width: 30px;
+  }
+  @media screen and (min-width: $iphone6--lower) and (max-device-width: $iphone6--upper) {
+    height: 35px;
+    width: 35px;
+  }
+  @media screen and (min-width: $iphone6-plus--lower) and (max-device-width: $iphone6-plus--upper) {
+    height: 40px;
+    width: 40px;
+  }
+
+  .selected {
+    border: 1px solid white;
+    border-radius: 6px;
+  }
 }
 
-.color-pellet {
+.CLR_green, .CLR_blue, .CLR_orange, .CLR_yellow, .CLR_pink, .CLR_purple, .CLR_rainbow, .CLR_eraser {
   height: 100%;
   width: 100%;
-  background: url(../assets/icons/pellets.png) 0 0;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;
+  margin-left: 6px;
+  margin-right: 6px;
 }
+
+.CLR_green {
+  background-image: url(../assets/icons/CLR_green.png);
+}
+
+.CLR_blue {
+  background-image: url(../assets/icons/CLR_blue.png);
+}
+
+.CLR_orange {
+  background-image: url(../assets/icons/CLR_orange.png);
+}
+
+.CLR_yellow {
+  background-image: url(../assets/icons/CLR_yellow.png);
+}
+
+.CLR_pink {
+  background-image: url(../assets/icons/CLR_pink.png);
+}
+
+.CLR_purple {
+  background-image: url(../assets/icons/CLR_purple.png);
+}
+
+.CLR_rainbow {
+  background-image: url(../assets/icons/CLR_rainbow.png);
+}
+
+.CLR_eraser {
+  background-image: url(../assets/icons/CLR_eraser.png);
+}
+

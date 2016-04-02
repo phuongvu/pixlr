@@ -56,7 +56,6 @@ class Gestures extends React.Component {
     }
 
 		this.options = {
-    	touchAction:true,
     	recognizers: {
     		press: {
     			time: 1500

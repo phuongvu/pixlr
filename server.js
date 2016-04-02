@@ -118,15 +118,13 @@ io.on('connection', function(socket) {
   //Pixels: [{id: "socketId", coords: []}]
 
   socket.on('draw', function(coord) {
-    console.log("\nDraw", coord, pixels, socket.client.id);
     var clientCoords = _.find(pixels, {id: socket.client.id});
     clientCoords.coords.push(coord);
-    console.log("\nCoords", clientCoords.coords);
     draw(coord);
   });
 
   socket.on('reset', function() {
-    console.log("\nReset", pixels);
+    debug("\nReset", pixels);
     var clientCoords = _.find(pixels, {id: socket.client.id});
     if(!_.isEmpty(clientCoords)) {
       _.map(clientCoords.coords, function(coord) {
@@ -148,7 +146,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('press', function(data) {
-    console.log("\nPress", data);
+    debug("\nPress", data);
     var cx = data.x;
     var cy = data.y;
     color = data.color;
@@ -172,7 +170,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('doubleTap', function(data) {
-    console.log("\nDouble tap", _.uniqWith(data.coords, _.isEqual));
+    debug("\nDouble tap", _.uniqWith(data.coords, _.isEqual));
     var rgb = utils.hexToRgbConverter(data.color);
     _.map(_.uniqWith(data.coords, _.isEqual), function(coord) {
       matrix.setPixel(coord.x, coord.y, rgb.r, rgb.g, rgb.b);
@@ -189,7 +187,7 @@ io.on('connection', function(socket) {
     _.remove(pixels, function(item) {
       return item.id === socket.client.id;
     });
-    console.log("disconnected", pixels);
+    debug("disconnected", pixels);
   });
 
   socket.on('error', function(e){

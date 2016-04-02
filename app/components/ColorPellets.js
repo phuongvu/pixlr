@@ -1,47 +1,70 @@
 import React from 'react'
 import Colors from 'material-ui/lib/styles/colors'
-import IconButton from 'material-ui/lib/icon-button'
-import ImageLooks from 'material-ui/lib/svg-icons/image/looks'
 import ColorPellet from './ColorPellet'
-import IconFactory from 'react-icon-factory'
+import classNames from 'classnames'
 
 const colors = [
 {
-  hex: '#ff4081',
-  name: Colors.purple500
-},
-{
   hex: '#9c27b0',
-  name: Colors.pink400
+  name: Colors.purple500,
+  icon: 'CLR_purple'
 },
 {
-  hex: '#d50000',
-  name: Colors.yellow400
+  hex: '#ec407a',
+  name: Colors.pink400,
+  icon: 'CLR_pink'
 },
 {
-  hex: '#4caf50',
-  name: Colors.orange400
+  hex: '#ffee58',
+  name: Colors.yellow400,
+  icon: 'CLR_yellow'
 },
 {
-  hex: '#2196f3',
-  name: Colors.blueA200
+  hex: '#ffa726',
+  name: Colors.orange400,
+  icon: 'CLR_orange'
 },
 {
-  hex: '#ff9800',
-  name: Colors.lightGreen500
+  hex: '#448aff',
+  name: Colors.blueA200,
+  icon: 'CLR_blue'
+},
+{
+  hex: '#8bc34a',
+  name: Colors.lightGreen500,
+  icon: 'CLR_green'
+},
+{
+  hex: '#FFFFFF',
+  icon: 'CLR_rainbow'
+},
+{
+  hex: '#000000',
+  icon: 'CLR_eraser'
 }]
 
-const ColorPellets = ({ onClick, selectedColor }) => (
-  <div className="color-selector">
-    {colors.map(color =>
-      <span key={ color.hex } 
-          className="color-pellet"
-          onClick={ () => onClick(color.hex) }
-          selected={ selectedColor === color.hex ? true : false }>
-      </span>
-    )}
-  </div>
-)
+class ColorPellets extends React.Component {
+
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    return (
+      <div className="color-selector">
+        {colors.map(color =>
+          <span
+            key={ color.hex } 
+            className={ classNames(color.icon, {
+                'selected': this.props.selectedColor === color.hex ? true : false
+            })}
+            onTouchTap={ () => this.props.onClick(color.hex) }>
+         </span>
+        )}
+      </div>
+    )
+  }
+}
 
 ColorPellets.propTypes = {
   onClick: React.PropTypes.func.isRequired,

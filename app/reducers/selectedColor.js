@@ -1,7 +1,6 @@
 import { SELECT_COLOR } from '../constants/ActionTypes'
-import { PINK } from '../constants/Colors'
 
-const initialState = PINK
+const initialState = '#9c27b0'
 
 const selectedColor = (state = initialState, action) => {
 	switch(action.type) {
