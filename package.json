@@ -34,6 +34,7 @@
     "lodash": "^4.6.1",
     "material-ui": "^0.14.4",
     "morgan": "^1.6.1",
+    "pngparse": "^2.0.1",
     "react": "^0.14.6",
     "react-art": "^0.14.0",
     "react-bootstrap": "^0.28.2",

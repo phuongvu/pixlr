@@ -13,6 +13,8 @@ var express = require('express')
   , _ = require('lodash')
   , utils = require('./lib/utils')
   , LedMatrix = require('node-rpi-rgb-led-matrix')
+  , fs = require('fs')
+  , pngparse = require('pngparse')
   ;
 
 var pixels = [];
@@ -31,6 +33,15 @@ var d = new Date();
 //Preping the LED matrix
 var matrix = new LedMatrix(32, 4, 1, 100, true);
 
+pngparse.parseFile('icon.jpeg', function(err, data) {
+  if(err) {
+    console.log("err", err);
+    throw err
+  }
+  console.log(data, 320*320*3);
+  matrix.setImageBuffer(data.data, 320, 320);
+})
+
 var setMarker = function() {
   var rgb = utils.hexToRgbConverter('#f44336');
   for (var y = 0; y <= 2; y++) {
@@ -39,8 +50,6 @@ var setMarker = function() {
     }
   }
 }
-
-setMarker();
 
 // var url = 'http://phuong.vu/?M1X';
 var url = 'http://phuong.vu/';
@@ -98,11 +107,14 @@ function draw(coord) {
 }
 
 io.on('connection', function(socket) {
+  //Prepare a clean slate
+  matrix.clear();
   var random = false;
 
   debug('socket id', socket.client.id, io.engine.clientsCount);
 
   pixels.push({id: socket.client.id, coords: []});
+  setMarker();
 
   //Pixels: [{id: "socketId", coords: []}]
 
@@ -177,6 +189,10 @@ io.on('connection', function(socket) {
     setMarker();
 
     debug('disconnected', pixels);
+
+    if (io.engine.clientsCount === 0) {
+      debug('Set image');
+    }
   });
 
   socket.on('error', function(e){
