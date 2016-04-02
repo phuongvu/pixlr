@@ -32,7 +32,7 @@ var d = new Date();
 var matrix = new LedMatrix(32, 4, 1, 100, true);
 
 var setMarker = function() {
-  var rgb = utils.hexToRgbConverter("#f44336");
+  var rgb = utils.hexToRgbConverter('#f44336');
   for (var y = 0; y <= 2; y++) {
     for (var x = 0; x <= 2 - y; x++) {
       matrix.setPixel(x, y, rgb.r, rgb.g, rgb.b);
@@ -84,7 +84,7 @@ if (isDeveloping) {
 }
 
 function draw(coord) {
-  debug("coords", coord);
+  debug('coords', coord);
 
   var x = coord.x,
       y = coord.y
@@ -100,20 +100,21 @@ function draw(coord) {
 io.on('connection', function(socket) {
   var random = false;
 
-  debug("socket id", socket.client.id, io.engine.clientsCount);
+  debug('socket id', socket.client.id, io.engine.clientsCount);
 
   pixels.push({id: socket.client.id, coords: []});
 
   //Pixels: [{id: "socketId", coords: []}]
 
   socket.on('draw', function(coord) {
+    debug('\nDraw', coord);
     var clientCoords = _.find(pixels, {id: socket.client.id});
     clientCoords.coords.push(coord);
     draw(coord);
   });
 
   socket.on('reset', function() {
-    debug("\nReset", pixels);
+    debug('\nReset', pixels);
     var clientCoords = _.find(pixels, {id: socket.client.id});
     if(!_.isEmpty(clientCoords)) {
       _.map(clientCoords.coords, function(coord) {
@@ -134,6 +135,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('rotate', function(data) {
+    debug('\nRotate', data);
     matrix.clear();
     matrix.rotate(data.orientation*90);
     setMarker();
@@ -146,7 +148,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('press', function(coord) {
-    debug("\nPress", coord);
+    debug('\nPress', coord);
 
     var clientDrawing = _.find(pixels, {id: socket.client.id});
     clientDrawing.coords.push(coord);
@@ -155,7 +157,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('disconnect', function(){
-    debug('user disconnected');
+    debug('\nUser disconnected');
 
     //Find client's drawing and remove them
     _.map(_.find(pixels, {id: socket.client.id}).coords, function(coord) {
@@ -174,7 +176,7 @@ io.on('connection', function(socket) {
     //set marker
     setMarker();
 
-    debug("disconnected", pixels);
+    debug('disconnected', pixels);
   });
 
   socket.on('error', function(e){
