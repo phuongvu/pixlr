@@ -9,7 +9,7 @@
     "prepare": "git clone --recursive git@github.com:phuongvu/pixlr.git node_modules",
     "build:webpack": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js",
     "build": "npm run clean && npm run build:webpack",
-    "build:dev": "node NODE_ENV=production server.js"
+    "build:dev": "cross-env NODE_ENV=development node server.js"
   },
   "keywords": [
     "Raspberry Pi 2",

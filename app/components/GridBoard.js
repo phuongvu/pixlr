@@ -44,19 +44,15 @@ class Grids extends React.Component {
     ctx.fill()
   }
 
-  draw(ctx, x, y, size, color) {
-    ctx.fillStyle = color
-    ctx.beginPath()
-    ctx.arc(x, y, size, 0, Math.PI*2, true)
-    ctx.closePath()
-    ctx.fill()
+  draw(ctx, x, y, color) {
+    ctx.strokeStyle = color
+    ctx.lineTo(x, y)
+    ctx.stroke()
   }
 
   touchStart(e) {
     let x =  this.getTouchPos(e).x
     let y = this.getTouchPos(e).y
-    let px = this.getTouchPos(e).px
-    let py = this.getTouchPos(e).py
     let color = this.props.selectedColor
     let rainbow = ''
 
@@ -71,8 +67,13 @@ class Grids extends React.Component {
       color = rainbow
     }
 
-    this.pixels.push({x: x, y: y, px: px, py: py, color: color, timestamp: Date.now()})
-    this.draw(this.ctx, x, y, this.brushSize, color)
+    this.pixels.push({x: x, y: y, color: color, timestamp: Date.now()})
+
+    //Draw
+    this.ctx.beginPath()
+    this.ctx.lineWidth = this.brushSize
+    this.ctx.lineJoin = this.ctx.lineCap = 'round'
+    this.ctx.moveTo(x, y)
 
     var points = [
       {
@@ -124,7 +125,7 @@ class Grids extends React.Component {
       color = rainbow
     }
     this.pixels.push({x: x, y: y, px: px, py: py, color: color, timestamp: Date.now()})
-    this.draw(this.ctx, x, y, this.brushSize, color)
+    this.draw(this.ctx, x, y, color)
 
     var points = [
       {
