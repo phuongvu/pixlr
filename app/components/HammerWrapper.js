@@ -21,7 +21,6 @@ class Gestures extends React.Component {
 	constructor(props) {
 		super(props)
 		this.handlePress = this.handlePress.bind(this)
-		this.handleDoubleTap = this.handleDoubleTap.bind(this)
 		this.calculateCoord = this.calculateCoord.bind(this)
 		this.socket = props.socket
 	}
@@ -36,18 +35,15 @@ class Gestures extends React.Component {
 
 	handlePress(e) {
 		let coord = this.calculateCoord(arguments[0])
-		this.socket.emit('press', coord)
-	}
+		let color = this.props.selectedColor
 
-	handleDoubleTap(e) {
-		var coords = []
-		let coord = this.calculateCoord(arguments[0])
-		_.times(360, function(r) {
-      var x = Math.floor(coord.x + 3*Math.cos(r*Math.PI/180))
-      var y = Math.floor(coord.y + 3*Math.sin(r*Math.PI/180))
-      coords.push({x: x, y: y})
-    })
-		this.socket.emit('doubleTap', {color: this.props.selectedColor, coords: coords})
+		for(let r = 0; r <= 6; r++) {
+			for (let d = 0; d <= 360; d++) {
+	      var x = Math.floor(coord.x + r*Math.cos(d*Math.PI/180))
+	      var y = Math.floor(coord.y + r*Math.sin(d*Math.PI/180))
+				this.socket.emit('press', {x: x, y: y, color: color})
+	    }	
+		}
 	}
 
 	componentDidMount(props) {
@@ -67,7 +63,6 @@ class Gestures extends React.Component {
 	render() {
 		return (
 			<Hammer onPressUp={this.handlePress}
-							onDoubleTap={this.handleDoubleTap}
 							options={this.options} 
 							vertical={true} >
 				<GridBoard socket={ this.socket } />

@@ -145,15 +145,13 @@ io.on('connection', function(socket) {
     })
   });
 
-  socket.on('press', function(arr) {
-    debug("\nPress", arr);
+  socket.on('press', function(coord) {
+    debug("\nPress", coord);
 
-    var clientDrawing = _.find(pixels, {id: socket.client.id})
-    clientDrawing.coords.push(arr);
+    var clientDrawing = _.find(pixels, {id: socket.client.id});
+    clientDrawing.coords.push(coord);
 
-    _.map(arr, function(coord) {
-      draw(coord);
-    });
+    draw(coord);
   });
 
   socket.on('disconnect', function(){
