@@ -33,13 +33,13 @@ var d = new Date();
 //Preping the LED matrix
 var matrix = new LedMatrix(32, 4, 1, 100, true);
 
-pngparse.parseFile('icon.jpeg', function(err, data) {
+pngparse.parseFile('icon.png', function(err, data) {
   if(err) {
     console.log("err", err);
     throw err
   }
-  console.log(data, 320*320*3);
-  matrix.setImageBuffer(data.data, 320, 320);
+  matrix.setImageBuffer(data.data, 64, 64);
+  matrix.draw();
 })
 
 var setMarker = function() {
@@ -108,10 +108,13 @@ function draw(coord) {
 
 io.on('connection', function(socket) {
   //Prepare a clean slate
-  matrix.clear();
   var random = false;
 
   debug('socket id', socket.client.id, io.engine.clientsCount);
+
+  if(io.engine.clientsCount === 1) {
+    matrix.clear();
+  }
 
   pixels.push({id: socket.client.id, coords: []});
   setMarker();
@@ -192,6 +195,14 @@ io.on('connection', function(socket) {
 
     if (io.engine.clientsCount === 0) {
       debug('Set image');
+      pngparse.parseFile('icon.png', function(err, data) {
+      if(err) {
+        debug("err", err);
+        throw err
+      }
+        matrix.setImageBuffer(data.data, 64, 64);
+        matrix.draw();
+      })
     }
   });
 
