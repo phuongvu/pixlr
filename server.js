@@ -84,27 +84,16 @@ if (isDeveloping) {
 }
 
 function draw(coord) {
+  debug("coords", coord);
+
   var x = coord.x,
       y = coord.y
       color = coord.color;
 
-  debug("coords", coord)
-
-  var rgb;
-
-  if(color === 'rainbow') {
-    var t = d.getSeconds();
-    rgb = utils.randomRGB(x, y, t);
-  } else {
-    rgb = utils.hexToRgbConverter(coord.color)
-  }
+  var rgb = utils.hexToRgbConverter(coord.color)
 
   if(x < 64 && y < 64) {
     matrix.setPixel(x, y, rgb.r, rgb.g, rgb.b);
-    matrix.setPixel(x - 1, y, rgb.r, rgb.g, rgb.b);
-    matrix.setPixel(x, y - 1, rgb.r, rgb.g, rgb.b);
-    matrix.setPixel(x, y + 1, rgb.r, rgb.g, rgb.b);
-    matrix.setPixel(x + 1, y, rgb.r, rgb.g, rgb.b);
   }
 }
 
@@ -138,42 +127,21 @@ io.on('connection', function(socket) {
     matrix.clear();
     matrix.rotate(data.orientation*90);
     setMarker();
-    _.map(pixels, function(clientCoord) {
-      _.map(clientCoords.coords, function(coord) {
-        draw(coord);
-      });
-    });
-  });
 
-  socket.on('press', function(data) {
-    debug("\nPress", data);
-    var cx = data.x;
-    var cy = data.y;
-    color = data.color;
-    var sweep = 64;
-
-    _.times(sweep, function(r) {
-      _.times(sweep, function(h) {
-        var x = Math.floor(cx + r*Math.sin(h*2*Math.PI/sweep));
-        var y = Math.floor(cy + r*Math.cos(h*2*Math.PI/sweep));
-        var rgb = utils.randomRGB(data.x, data.y, r);
-        matrix.setPixel(x, y, rgb.r, rgb.g, rgb.b);
-      })
+    var clientDrawing = _.find(pixels, {id: socket.client.id});
+    _.map(clientDrawing.coords, function(coord) {
+      draw(coord);
     })
-
-    _.map(pixels, function(clientCoords) {
-      _.map(clientCoords.coords, function(coord) {
-        draw(coord);
-      });
-    });
-    setMarker();
   });
 
-  socket.on('doubleTap', function(data) {
-    debug("\nDouble tap", _.uniqWith(data.coords, _.isEqual));
-    var rgb = utils.hexToRgbConverter(data.color);
-    _.map(_.uniqWith(data.coords, _.isEqual), function(coord) {
-      matrix.setPixel(coord.x, coord.y, rgb.r, rgb.g, rgb.b);
+  socket.on('press', function(arr) {
+    debug("\nPress", arr);
+
+    var clientDrawing = _.find(pixels, {id: socket.client.id})
+    clientDrawing.coords.push(arr);
+
+    _.map(arr, function(coord) {
+      draw(coord);
     });
   });
 
