@@ -7,7 +7,6 @@ var express = require('express')
   , debug = require('debug')('admin:app')
   , morgan = require('morgan')
   , path = require('path')
-  , eddystoneBeacon = require('eddystone-beacon')
   , redis = require('redis')
   , Promise = require('bluebird')
   , _ = require('lodash')
@@ -33,7 +32,7 @@ var d = new Date();
 //Preping the LED matrix
 var matrix = new LedMatrix(32, 4, 1, 100, true);
 
-pngparse.parseFile('icon.png', function(err, data) {
+pngparse.parseFile(path.join(__dirname,'icon.png'), function(err, data) {
   if(err) {
     console.log("err", err);
     throw err
@@ -50,17 +49,6 @@ var setMarker = function() {
     }
   }
 }
-
-// var url = 'http://phuong.vu/?M1X';
-var url = 'http://phuong.vu/';
-var options = {
-  name: 'Beacon',    // set device name when advertising (Linux only)
-  txPowerLevel: -100, // override TX Power Level, default value is -21,
-  tlmCount: 2,       // 2 TLM frames
-  tlmPeriod: 10      // every 10 advertisements
-};
-
-// eddystoneBeacon.advertiseUrl(url, options);
 
 if (isDeveloping) {
   const compiler = webpack(config);
@@ -196,10 +184,11 @@ io.on('connection', function(socket) {
     if (io.engine.clientsCount === 0) {
       debug('Set image');
       pngparse.parseFile('icon.png', function(err, data) {
-      if(err) {
-        debug("err", err);
-        throw err
-      }
+        if(err) {
+          debug("err", err);
+          throw err
+        }
+        matrix.rotate(0);
         matrix.setImageBuffer(data.data, 64, 64);
         matrix.draw();
       })
