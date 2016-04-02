@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import App from './App'
 import configureStore from './store/configureStore'
 
-import './bower_components/bootstrap/dist/css/bootstrap.min.css'
+import './bower_components/bootstrap/dist/css/bootstrap.css'
 import './css/main.scss'
 
 const store = configureStore()

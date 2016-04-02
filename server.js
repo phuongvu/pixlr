@@ -23,8 +23,8 @@ const webpack = require('webpack')
       , config = require('./webpack.config.js')
       ;
 
-const isDeveloping = process.env.NODE_ENV !== 'production';
-const port = isDeveloping ? 80 : process.env.PORT;
+const isDeveloping = process.env.NODE_ENV === 'development';
+const port = 80;
 
 var d = new Date();
 
