@@ -159,24 +159,22 @@ io.on('connection', function(socket) {
   socket.on('disconnect', function(){
     debug('user disconnected');
 
-    setTimeout(function(){
-      //Find client's drawing and remove them
-      _.map(_.find(pixels, {id: socket.client.id}).coords, function(coord) {
-        matrix.setPixel(coord.x, coord.y, 0, 0, 0);
+    //Find client's drawing and remove them
+    _.map(_.find(pixels, {id: socket.client.id}).coords, function(coord) {
+      matrix.setPixel(coord.x, coord.y, 0, 0, 0);
+    });
+    //Remove client's drawing from array
+    _.remove(pixels, function(item) {
+      return item.id === socket.client.id;
+    });
+    //redraw
+    _.map(pixels, function(p) {
+      _.map(p.coords, function(coord) {
+        draw(coord);
       });
-      //Remove client's drawing from array
-      _.remove(pixels, function(item) {
-        return item.id === socket.client.id;
-      });
-      //redraw
-      _.map(pixels, function(p) {
-        _.map(p.coords, function(coord) {
-          draw(coord);
-        });
-      })
-      //set marker
-      setMarker();
-    }.bind(this), 600000);
+    })
+    //set marker
+    setMarker();
 
     debug("disconnected", pixels);
   });

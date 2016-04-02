@@ -184,7 +184,7 @@ html, body {
   }
 }
 
-.CLR_green, .CLR_blue, .CLR_orange, .CLR_yellow, .CLR_pink, .CLR_purple, .CLR_rainbow, .CLR_eraser {
+.CLR_green, .CLR_blue, .CLR_orange, .CLR_yellow, .CLR_pink, .CLR_purple, .CLR_rainbow, .CLR_eraser, .CLR_red {
   height: 100%;
   width: 100%;
   background-size: contain;
@@ -220,6 +220,10 @@ html, body {
 
 .CLR_rainbow {
   background-image: url(../assets/icons/CLR_rainbow.png);
+}
+
+.CLR_red {
+  background-image: url(../assets/icons/CLR_red.png);
 }
 
 .CLR_eraser {

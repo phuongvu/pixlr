@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { rotate } from '../actions'
 import ReactDOM from 'react-dom'
 import { draw } from '../actions'
+import _ from 'lodash'
 
 class Grids extends React.Component {
 	constructor(props) {
@@ -21,6 +22,7 @@ class Grids extends React.Component {
     this.socket = props.socket
     this.pixels = []
     this.colorIndex = 0
+    this.frequency = 0.3
 	}
 
   byte2Hex(n) {
@@ -56,17 +58,17 @@ class Grids extends React.Component {
     let px = this.getTouchPos(e).px
     let py = this.getTouchPos(e).py
     let color = this.props.selectedColor
-    let rainbow = false
+    let rainbow = ''
 
-    if(color === '#FFFFFF') {
-      this.colorIndex = 0
-      this.frequency = 0.3
-      let r = Math.sin(this.frequency*this.colorIndex + 0) * 127 + 128
-      let g = Math.sin(this.frequency*this.colorIndex + 2) * 127 + 128
-      let b = Math.sin(this.frequency*this.colorIndex + 4) * 127 + 128
+    if(color === "#FFFFFF") {
+      let r  = Math.sin(this.frequency*this.colorIndex + 0) * 127 + 128
+      let g  = Math.sin(this.frequency*this.colorIndex + 2) * 127 + 128
+      let b  = Math.sin(this.frequency*this.colorIndex + 4) * 127 + 128
       this.colorIndex++
       rainbow = this.RGB2Color(r, g, b)
-      console.log("rgb", rainbow)
+    }
+    if(rainbow.length !== 0) {
+      color = rainbow
     }
 
     this.pixels.push({x: x, y: y, px: px, py: py, color: color, timestamp: Date.now()})
@@ -118,7 +120,9 @@ class Grids extends React.Component {
       this.colorIndex++
       rainbow = this.RGB2Color(r, g, b)
     }
-
+    if(rainbow.length !== 0) {
+      color = rainbow
+    }
     this.pixels.push({x: x, y: y, px: px, py: py, color: color, timestamp: Date.now()})
     this.draw(this.ctx, x, y, this.brushSize, color)
 
