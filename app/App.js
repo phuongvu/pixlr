@@ -27,12 +27,6 @@ export default class App extends Component {
 							</div>
 						</div>
 					</div>
-					<div className="row">
-						<div className="app__statement">
-							<span className="statement__first-line">Draw anything you want or play</span><br/>
-							<span className="statement__second-line"> a word guessing game with your friends! </span>
-						</div>
-					</div>
 				</div>
 				<div className="row">
 					<HammerWrapper socket={ socket } />

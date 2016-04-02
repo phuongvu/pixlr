@@ -5,6 +5,11 @@ import classNames from 'classnames'
 
 const colors = [
 {
+  hex: '#f44336',
+  name: Colors.red500,
+  icon: 'CLR_red'
+},
+{
   hex: '#ec407a',
   name: Colors.pink400,
   icon: 'CLR_pink'
@@ -37,10 +42,6 @@ const colors = [
 {
   hex: '#FFFFFF',
   icon: 'CLR_rainbow'
-},
-{
-  hex: '#000000',
-  icon: 'CLR_eraser'
 }]
 
 class ColorPellets extends React.Component {

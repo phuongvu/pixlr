@@ -121,6 +121,16 @@ io.on('connection', function(socket) {
       });
       clientCoords.coords = []
     }
+
+    //redraw
+    _.map(pixels, function(p) {
+      _.map(p.coords, function(coord) {
+        draw(coord);
+      });
+    })
+    //set marker
+    setMarker();
+
   });
 
   socket.on('rotate', function(data) {
@@ -128,9 +138,10 @@ io.on('connection', function(socket) {
     matrix.rotate(data.orientation*90);
     setMarker();
 
-    var clientDrawing = _.find(pixels, {id: socket.client.id});
-    _.map(clientDrawing.coords, function(coord) {
-      draw(coord);
+    _.map(pixels, function(p) {
+      _.map(p.coords, function(coord) {
+        draw(coord);
+      });
     })
   });
 
@@ -148,13 +159,25 @@ io.on('connection', function(socket) {
   socket.on('disconnect', function(){
     debug('user disconnected');
 
-    _.map(_.find(pixels, {id: socket.client.id}).coords, function(coord) {
-      matrix.setPixel(coord.x, coord.y, 0, 0, 0);
-    });
+    setTimeout(function(){
+      //Find client's drawing and remove them
+      _.map(_.find(pixels, {id: socket.client.id}).coords, function(coord) {
+        matrix.setPixel(coord.x, coord.y, 0, 0, 0);
+      });
+      //Remove client's drawing from array
+      _.remove(pixels, function(item) {
+        return item.id === socket.client.id;
+      });
+      //redraw
+      _.map(pixels, function(p) {
+        _.map(p.coords, function(coord) {
+          draw(coord);
+        });
+      })
+      //set marker
+      setMarker();
+    }.bind(this), 600000);
 
-    _.remove(pixels, function(item) {
-      return item.id === socket.client.id;
-    });
     debug("disconnected", pixels);
   });
 

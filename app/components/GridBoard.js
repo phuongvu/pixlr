@@ -20,7 +20,17 @@ class Grids extends React.Component {
     this.setMarker = this.setMarker.bind(this)
     this.socket = props.socket
     this.pixels = []
+    this.colorIndex = 0
 	}
+
+  byte2Hex(n) {
+    var nybHexString = "0123456789ABCDEF";
+    return String(nybHexString.substr((n >> 4) & 0x0F,1)) + nybHexString.substr(n & 0x0F,1)
+  }
+
+  RGB2Color(r,g,b) {
+    return '#' + this.byte2Hex(r) + this.byte2Hex(g) + this.byte2Hex(b)
+  }
 
   setMarker(ctx, color) {
     ctx.fillStyle = color
@@ -46,10 +56,49 @@ class Grids extends React.Component {
     let px = this.getTouchPos(e).px
     let py = this.getTouchPos(e).py
     let color = this.props.selectedColor
+    let rainbow = false
+
+    if(color === '#FFFFFF') {
+      this.colorIndex = 0
+      this.frequency = 0.3
+      let r = Math.sin(this.frequency*this.colorIndex + 0) * 127 + 128
+      let g = Math.sin(this.frequency*this.colorIndex + 2) * 127 + 128
+      let b = Math.sin(this.frequency*this.colorIndex + 4) * 127 + 128
+      this.colorIndex++
+      rainbow = this.RGB2Color(r, g, b)
+      console.log("rgb", rainbow)
+    }
 
     this.pixels.push({x: x, y: y, px: px, py: py, color: color, timestamp: Date.now()})
     this.draw(this.ctx, x, y, this.brushSize, color)
-    this.socket.emit('draw', {x: Math.floor(x*64/this.width), y: Math.floor(y*64/this.width), color: color})
+
+    var points = [
+      {
+        x: Math.floor(x*64/this.width) - 1,
+        y: Math.floor(y*64/this.width - 1),
+        color: color
+      },
+      {
+        x: Math.floor(x*64/this.width) - 1,
+        y: Math.floor(y*64/this.width),
+        color: color
+      },
+      {
+        x: Math.floor(x*64/this.width),
+        y: Math.floor(y*64/this.width) - 1,
+        color: color
+      },
+      {
+        x: Math.floor(x*64/this.width),
+        y: Math.floor(y*64/this.width),
+        color: color
+      }
+    ]
+
+    _.map(points, function(p) {
+      this.socket.emit('draw', {x: p.x, y: p.y, color: p.color})
+    }.bind(this))
+
     e.preventDefault()
   }
 
@@ -60,10 +109,46 @@ class Grids extends React.Component {
     let px = this.getTouchPos(e).px
     let py = this.getTouchPos(e).py
     let color = this.props.selectedColor
+    let rainbow = ''
 
-    this.pixels.push({x: x, y: y, px: px, py: py, color: color, timestamp: Date.now()})    
+    if(color === "#FFFFFF") {
+      let r  = Math.sin(this.frequency*this.colorIndex + 0) * 127 + 128
+      let g  = Math.sin(this.frequency*this.colorIndex + 2) * 127 + 128
+      let b  = Math.sin(this.frequency*this.colorIndex + 4) * 127 + 128
+      this.colorIndex++
+      rainbow = this.RGB2Color(r, g, b)
+    }
+
+    this.pixels.push({x: x, y: y, px: px, py: py, color: color, timestamp: Date.now()})
     this.draw(this.ctx, x, y, this.brushSize, color)
-    this.socket.emit('draw', {x: Math.floor(x*64/this.width), y: Math.floor(y*64/this.width), color: color})
+
+    var points = [
+      {
+        x: Math.floor(x*64/this.width) - 1,
+        y: Math.floor(y*64/this.width) - 1,
+        color: color
+      },
+      {
+        x: Math.floor(x*64/this.width) - 1,
+        y: Math.floor(y*64/this.width),
+        color: color
+      },
+      {
+        x: Math.floor(x*64/this.width),
+        y: Math.floor(y*64/this.width) - 1,
+        color: color
+      },
+      {
+        x: Math.floor(x*64/this.width),
+        y: Math.floor(y*64/this.width),
+        color: color
+      }
+    ]
+
+    _.map(points, function(p) {
+      this.socket.emit('draw', {x: p.x, y: p.y, color: p.color})
+    }.bind(this))
+
     e.preventDefault()
   }
 
@@ -117,7 +202,7 @@ class Grids extends React.Component {
     this.styleWidth = parseInt(this.canvas.style.width.split(/ /)[0].replace(/[^\d]/g, ''))
     this.styleHeight = parseInt(this.canvas.style.height.split(/ /)[0].replace(/[^\d]/g, ''))
     this.ratio = this.width/this.styleWidth
-    this.brushSize = 8*this.ratio
+    this.brushSize = 5*this.ratio
 
     this.socket.onerror = function (error) {
       console.error('There was an un-identified Web Socket error', error)
