@@ -5,19 +5,9 @@ import classNames from 'classnames'
 
 const colors = [
 {
-  hex: '#9c27b0',
-  name: Colors.purple500,
-  icon: 'CLR_purple'
-},
-{
   hex: '#ec407a',
   name: Colors.pink400,
   icon: 'CLR_pink'
-},
-{
-  hex: '#ffee58',
-  name: Colors.yellow400,
-  icon: 'CLR_yellow'
 },
 {
   hex: '#ffa726',
@@ -25,14 +15,24 @@ const colors = [
   icon: 'CLR_orange'
 },
 {
-  hex: '#448aff',
-  name: Colors.blueA200,
-  icon: 'CLR_blue'
+  hex: '#ffee58',
+  name: Colors.yellow400,
+  icon: 'CLR_yellow'
 },
 {
   hex: '#8bc34a',
   name: Colors.lightGreen500,
   icon: 'CLR_green'
+},
+{
+  hex: '#448aff',
+  name: Colors.blueA200,
+  icon: 'CLR_blue'
+},
+{
+  hex: '#9c27b0',
+  name: Colors.purple500,
+  icon: 'CLR_purple'
 },
 {
   hex: '#FFFFFF',
