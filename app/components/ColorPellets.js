@@ -3,7 +3,7 @@ import Colors from 'material-ui/lib/styles/colors'
 import IconButton from 'material-ui/lib/icon-button'
 import ImageLooks from 'material-ui/lib/svg-icons/image/looks'
 import ColorPellet from './ColorPellet'
-var SimplexNoise = require('simplex-noise')
+import IconFactory from 'react-icon-factory'
 
 const colors = [
 {
@@ -29,25 +29,17 @@ const colors = [
 {
   hex: '#ff9800',
   name: Colors.lightGreen500
-},
-{
-  hex: '#000000',
-  name: Colors.grey900
 }]
 
 const ColorPellets = ({ onClick, selectedColor }) => (
-  <div>
+  <div className="color-selector">
     {colors.map(color =>
-      <ColorPellet
-        key={ color.hex }
-        color={ color.name }
-        onClick={ () => onClick(color.hex) }
-        selected={ selectedColor === color.hex ? true : false }
-      />
+      <span key={ color.hex } 
+          className="color-pellet"
+          onClick={ () => onClick(color.hex) }
+          selected={ selectedColor === color.hex ? true : false }>
+      </span>
     )}
-    <IconButton touch={true} onClick={() => onClick('rainbow')} className={selectedColor === 'rainbow' ? 'selected' : ''}>
-      <ImageLooks color={Colors.blueGrey50} className={'rainbow'} />
-    </IconButton>
   </div>
 )
 
