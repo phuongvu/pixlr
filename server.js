@@ -13,6 +13,8 @@ var express = require('express')
   , _ = require('lodash')
   , utils = require('./lib/utils')
   , LedMatrix = require('node-rpi-rgb-led-matrix')
+  , fs = require('fs')
+  , pngparse = require('pngparse')
   ;
 
 var pixels = [];
@@ -31,16 +33,23 @@ var d = new Date();
 //Preping the LED matrix
 var matrix = new LedMatrix(32, 4, 1, 100, true);
 
+pngparse.parseFile('icon.png', function(err, data) {
+  if(err) {
+    console.log("err", err);
+    throw err
+  }
+  matrix.setImageBuffer(data.data, 64, 64);
+  matrix.draw();
+})
+
 var setMarker = function() {
-  var rgb = utils.hexToRgbConverter("#f44336");
+  var rgb = utils.hexToRgbConverter('#f44336');
   for (var y = 0; y <= 2; y++) {
     for (var x = 0; x <= 2 - y; x++) {
       matrix.setPixel(x, y, rgb.r, rgb.g, rgb.b);
     }
   }
 }
-
-setMarker();
 
 // var url = 'http://phuong.vu/?M1X';
 var url = 'http://phuong.vu/';
@@ -84,7 +93,7 @@ if (isDeveloping) {
 }
 
 function draw(coord) {
-  debug("coords", coord);
+  debug('coords', coord);
 
   var x = coord.x,
       y = coord.y
@@ -98,22 +107,29 @@ function draw(coord) {
 }
 
 io.on('connection', function(socket) {
+  //Prepare a clean slate
   var random = false;
 
-  debug("socket id", socket.client.id, io.engine.clientsCount);
+  debug('socket id', socket.client.id, io.engine.clientsCount);
+
+  if(io.engine.clientsCount === 1) {
+    matrix.clear();
+  }
 
   pixels.push({id: socket.client.id, coords: []});
+  setMarker();
 
   //Pixels: [{id: "socketId", coords: []}]
 
   socket.on('draw', function(coord) {
+    debug('\nDraw', coord);
     var clientCoords = _.find(pixels, {id: socket.client.id});
     clientCoords.coords.push(coord);
     draw(coord);
   });
 
   socket.on('reset', function() {
-    debug("\nReset", pixels);
+    debug('\nReset', pixels);
     var clientCoords = _.find(pixels, {id: socket.client.id});
     if(!_.isEmpty(clientCoords)) {
       _.map(clientCoords.coords, function(coord) {
@@ -134,6 +150,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('rotate', function(data) {
+    debug('\nRotate', data);
     matrix.clear();
     matrix.rotate(data.orientation*90);
     setMarker();
@@ -146,7 +163,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('press', function(coord) {
-    debug("\nPress", coord);
+    debug('\nPress', coord);
 
     var clientDrawing = _.find(pixels, {id: socket.client.id});
     clientDrawing.coords.push(coord);
@@ -155,7 +172,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('disconnect', function(){
-    debug('user disconnected');
+    debug('\nUser disconnected');
 
     //Find client's drawing and remove them
     _.map(_.find(pixels, {id: socket.client.id}).coords, function(coord) {
@@ -174,7 +191,19 @@ io.on('connection', function(socket) {
     //set marker
     setMarker();
 
-    debug("disconnected", pixels);
+    debug('disconnected', pixels);
+
+    if (io.engine.clientsCount === 0) {
+      debug('Set image');
+      pngparse.parseFile('icon.png', function(err, data) {
+      if(err) {
+        debug("err", err);
+        throw err
+      }
+        matrix.setImageBuffer(data.data, 64, 64);
+        matrix.draw();
+      })
+    }
   });
 
   socket.on('error', function(e){

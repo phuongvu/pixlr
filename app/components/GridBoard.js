@@ -53,54 +53,12 @@ class Grids extends React.Component {
   touchStart(e) {
     let x =  this.getTouchPos(e).x
     let y = this.getTouchPos(e).y
-    let color = this.props.selectedColor
-    let rainbow = ''
-
-    if(color === "#FFFFFF") {
-      let r  = Math.sin(this.frequency*this.colorIndex + 0) * 127 + 128
-      let g  = Math.sin(this.frequency*this.colorIndex + 2) * 127 + 128
-      let b  = Math.sin(this.frequency*this.colorIndex + 4) * 127 + 128
-      this.colorIndex++
-      rainbow = this.RGB2Color(r, g, b)
-    }
-    if(rainbow.length !== 0) {
-      color = rainbow
-    }
-
-    this.pixels.push({x: x, y: y, color: color, timestamp: Date.now()})
 
     //Draw
     this.ctx.beginPath()
     this.ctx.lineWidth = this.brushSize
     this.ctx.lineJoin = this.ctx.lineCap = 'round'
     this.ctx.moveTo(x, y)
-
-    var points = [
-      {
-        x: Math.floor(x*64/this.width) - 1,
-        y: Math.floor(y*64/this.width - 1),
-        color: color
-      },
-      {
-        x: Math.floor(x*64/this.width) - 1,
-        y: Math.floor(y*64/this.width),
-        color: color
-      },
-      {
-        x: Math.floor(x*64/this.width),
-        y: Math.floor(y*64/this.width) - 1,
-        color: color
-      },
-      {
-        x: Math.floor(x*64/this.width),
-        y: Math.floor(y*64/this.width),
-        color: color
-      }
-    ]
-
-    _.map(points, function(p) {
-      this.socket.emit('draw', {x: p.x, y: p.y, color: p.color})
-    }.bind(this))
 
     e.preventDefault()
   }
@@ -119,11 +77,9 @@ class Grids extends React.Component {
       let g  = Math.sin(this.frequency*this.colorIndex + 2) * 127 + 128
       let b  = Math.sin(this.frequency*this.colorIndex + 4) * 127 + 128
       this.colorIndex++
-      rainbow = this.RGB2Color(r, g, b)
+      color = this.RGB2Color(r, g, b)
     }
-    if(rainbow.length !== 0) {
-      color = rainbow
-    }
+
     this.pixels.push({x: x, y: y, px: px, py: py, color: color, timestamp: Date.now()})
     this.draw(this.ctx, x, y, color)
 

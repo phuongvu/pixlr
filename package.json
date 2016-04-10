@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "clean": "rimraf dist",
+    "clean": "rimraf public",
     "prepare": "git clone --recursive git@github.com:phuongvu/pixlr.git node_modules",
     "build:webpack": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js",
     "build": "npm run clean && npm run build:webpack",
@@ -34,6 +34,7 @@
     "lodash": "^4.6.1",
     "material-ui": "^0.14.4",
     "morgan": "^1.6.1",
+    "pngparse": "^2.0.1",
     "react": "^0.14.6",
     "react-art": "^0.14.0",
     "react-bootstrap": "^0.28.2",
