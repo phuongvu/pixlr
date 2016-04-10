@@ -71,13 +71,13 @@ if (isDeveloping) {
     res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'public/index.html')));
     res.end();
   });
+  app.use(morgan('combined'));
 } else {
   app.use(express.static(__dirname + '/public'));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
   app.use(express.static(path.join(__dirname, 'public')));
-  app.use(morgan('combined'));
 }
 
 function draw(coord) {
