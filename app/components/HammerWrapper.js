@@ -33,19 +33,6 @@ class Gestures extends React.Component {
 		}
 	}
 
-	handlePress(e) {
-		let coord = this.calculateCoord(arguments[0])
-		let color = this.props.selectedColor
-
-		for(let r = 0; r <= 6; r++) {
-			for (let d = 0; d <= 360; d++) {
-	      var x = Math.floor(coord.x + r*Math.cos(d*Math.PI/180))
-	      var y = Math.floor(coord.y + r*Math.sin(d*Math.PI/180))
-				this.socket.emit('press', {x: x, y: y, color: color})
-	    }	
-		}
-	}
-
 	componentDidMount(props) {
     this.socket.onerror = function (error) {
       console.error('There was an un-identified Web Socket error', error)
@@ -62,8 +49,7 @@ class Gestures extends React.Component {
 
 	render() {
 		return (
-			<Hammer onPressUp={this.handlePress}
-							options={this.options} 
+			<Hammer options={this.options} 
 							vertical={true} >
 				<GridBoard socket={ this.socket } />
 			</Hammer>
