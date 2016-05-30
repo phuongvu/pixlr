@@ -10,7 +10,7 @@ const PictionaryWords = ({ onclick, word }) => (
   		</IconButton>
 		</span>
 		<span className="pictionary__title">
-			Generate word:
+			Suggested topic:
 		</span>
 		<span className="pictionary__words">
 			{word}

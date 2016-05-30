@@ -16,8 +16,6 @@ var express = require('express')
   , pngparse = require('pngparse')
   ;
 
-var pixels = [];
-
 const webpack = require('webpack')
       , webpackMiddleware = require('webpack-dev-middleware')
       , webpackHotMiddleware = require('webpack-hot-middleware')
@@ -28,6 +26,7 @@ const isDeveloping = process.env.NODE_ENV === 'development';
 const port = 80;
 
 var d = new Date();
+var pixels = [];
 
 //Preping the LED matrix
 var matrix = new LedMatrix(32, 4, 1, 100, true);
@@ -148,15 +147,6 @@ io.on('connection', function(socket) {
         draw(coord);
       });
     })
-  });
-
-  socket.on('press', function(coord) {
-    debug('\nPress', coord);
-
-    var clientDrawing = _.find(pixels, {id: socket.client.id});
-    clientDrawing.coords.push(coord);
-
-    draw(coord);
   });
 
   socket.on('disconnect', function(){

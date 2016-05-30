@@ -47,17 +47,19 @@ html, body {
 
 .app__header {
   margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-align: center;
 
   .app__logo__container {
     width: auto;
     
     @media screen and (min-width: $iphone5--lower) and (max-device-width: $iphone5--upper) {
+      margin-bottom: 0.5rem;
       height: 20px;
     }
     @media screen and (min-width: $iphone6--lower) and (max-device-width: $iphone6--upper) {
-      height: 30px;
+      margin-bottom: 0.5rem;
+      height: 25px;
     }
     @media screen and (min-width: $iphone6-plus--lower) and (max-device-width: $iphone6-plus--upper) {
       height: 35px;
@@ -104,20 +106,32 @@ html, body {
     justify-content: center;
     min-width: 100% !important;
     border-radius: 8px !important;
+    @media screen and (min-width: $iphone5--lower) and (max-device-width: $iphone5--upper) {
+      border-radius: 5px !important;
+    }
+    @media screen and (min-width: $iphone6--lower) and (max-device-width: $iphone6--upper) {
+      border-radius: 8px !important;
+    }
+    @media screen and (min-width: $iphone6-plus--lower) and (max-device-width: $iphone6-plus--upper) {
+      border-radius: 8px !important;
+    }
+    
     
     button {
-      border-radius: 8px !important;
       span {
         padding-left: 0 !important;
         text-transform: none !important;
         @media screen and (min-width: $iphone5--lower) and (max-device-width: $iphone5--upper) {
           font-size: 1.4rem !important;
+          border-radius: 5px !important;
         }
         @media screen and (min-width: $iphone6--lower) and (max-device-width: $iphone6--upper) {
           font-size: 1.7rem !important;
+          border-radius: 8px !important;
         }
         @media screen and (min-width: $iphone6-plus--lower) and (max-device-width: $iphone6-plus--upper) {
           font-size: 1.7rem !important;
+          border-radius: 8px !important;
         }
       }
       svg {
@@ -129,7 +143,6 @@ html, body {
 }
 
 .pictionary {
-  margin-top: 0.5rem;
   display: flex;
   align-items: center;
 }
@@ -162,18 +175,18 @@ html, body {
   align-items: center;
   justify-content: center;
   min-width: 100% !important;
-  margin-top: 10px;
-  margin-bottom: 10px;
 
   @media screen and (min-width: $iphone5--lower) and (max-device-width: $iphone5--upper) {
+    height: 25px;
+    width: 25px;
+  }
+  @media screen and (min-width: $iphone6--lower) and (max-device-width: $iphone6--upper) {
     height: 30px;
     width: 30px;
   }
-  @media screen and (min-width: $iphone6--lower) and (max-device-width: $iphone6--upper) {
-    height: 35px;
-    width: 35px;
-  }
   @media screen and (min-width: $iphone6-plus--lower) and (max-device-width: $iphone6-plus--upper) {
+    margin-top: 10px;
+    margin-bottom: 10px;
     height: 40px;
     width: 40px;
   }

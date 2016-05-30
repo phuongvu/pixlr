@@ -4,7 +4,7 @@
   "description": "Pixlr lets people manipulate a 64x64 Led panel via a web app",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "nodemon server.js",
     "clean": "rimraf public",
     "prepare": "git clone --recursive git@github.com:phuongvu/pixlr.git node_modules",
     "build:webpack": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js",
