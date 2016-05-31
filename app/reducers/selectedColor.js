@@ -14,12 +14,12 @@ const colors = [
 const initialState = colors[_.random(0, colors.length - 1)]
 
 const selectedColor = (state = initialState, action) => {
-	switch(action.type) {
-		case SELECT_COLOR:
-			return action.color
-		default:
-			return state
-	}
+  switch(action.type) {
+    case SELECT_COLOR:
+      return action.color
+    default:
+      return state
+  }
 }
 
 export default selectedColor

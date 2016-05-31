@@ -1,20 +1,16 @@
 import React from 'react'
-import { getDimensions, subscribeResize, unsubscribeResize } from '../utils/DisplayHelper'
 import { Surface } from 'react-art'
 import { connect } from 'react-redux'
-import { rotate } from '../actions'
-import ReactDOM from 'react-dom'
-import { draw } from '../actions'
 import Hammer from 'react-hammerjs'
 import GridBoard from './GridBoard'
 
 window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame       ||
-          window.webkitRequestAnimationFrame ||
-          window.mozRequestAnimationFrame    ||
-          function( callback ){
-            window.setTimeout(callback, 1000 / 60);
-          };
+	return  window.requestAnimationFrame       ||
+		window.webkitRequestAnimationFrame ||
+		window.mozRequestAnimationFrame    ||
+		function( callback ){
+			window.setTimeout(callback, 1000 / 60);
+		};
 })();
 
 class Gestures extends React.Component {
@@ -34,16 +30,16 @@ class Gestures extends React.Component {
 	}
 
 	componentDidMount(props) {
-    this.socket.onerror = function (error) {
-      console.error('There was an un-identified Web Socket error', error)
-    }
+		this.socket.onerror = function (error) {
+			console.error('There was an un-identified Web Socket error', error)
+		}
 
 		this.options = {
-    	recognizers: {
-    		press: {
-    			time: 1500
-    		}
-    	}
+			recognizers: {
+				press: {
+					time: 1500
+				}
+			}
 		}
 	}
 
@@ -58,9 +54,9 @@ class Gestures extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  return {
-    selectedColor: state.selectedColor
-  }
+	return {
+		selectedColor: state.selectedColor
+	}
 }
 
 const HammerWrapper = connect(mapStateToProps)(Gestures)

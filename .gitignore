@@ -4,3 +4,5 @@ rethinkdb_data
 app/bower_components/*
 assets/fonts
 public
+.idea/
+node_modules/

@@ -7,7 +7,7 @@ const pixels = (state = [], action) => {
 			return _.flatten(_.concat(state, action.pixels))
 		case CLEAR:
 			return state.filter(pixel => 
-				pixel.isOn === true
+			pixel.isOn === true
 			)
 		default:
 			return state

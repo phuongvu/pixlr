@@ -8,10 +8,10 @@ import { draw } from '../actions'
 import _ from 'lodash'
 
 class Grids extends React.Component {
-	constructor(props) {
-		super(props)
+  constructor(props) {
+    super(props)
     this.state = {
-    	dimensions: getDimensions()
+      dimensions: getDimensions()
     }
     this.setDisplayDimensions = this.setDisplayDimensions.bind(this)
     this.touchStart = this.touchStart.bind(this)
@@ -23,7 +23,7 @@ class Grids extends React.Component {
     this.pixels = []
     this.colorIndex = 0
     this.frequency = 0.3
-	}
+  }
 
   byte2Hex(n) {
     var nybHexString = "0123456789ABCDEF";
@@ -136,19 +136,19 @@ class Grids extends React.Component {
     }
   }
 	
-	setDisplayDimensions(props) {
-		this.setState({
-			dimensions: getDimensions()
-		})
-	}
+  setDisplayDimensions(props) {
+    this.setState({
+      dimensions: getDimensions()
+    })
+  }
 
-	componentWillMount() {
-		subscribeResize(this.setDisplayDimensions)
-	}
+  componentWillMount() {
+    subscribeResize(this.setDisplayDimensions)
+  }
 
-	componentWillUnmount() {
-		unsubscribeResize(this.setDisplayDimensions)
-	}
+  componentWillUnmount() {
+    unsubscribeResize(this.setDisplayDimensions)
+  }
 
   componentDidMount(props) {
     this.canvas = ReactDOM.findDOMNode(this)
@@ -189,21 +189,21 @@ class Grids extends React.Component {
     return false
   }
 
-	render() {
-		let width = this.state.dimensions.width
-		let height = this.state.dimensions.height
+  render() {
+    let width = this.state.dimensions.width
+    let height = this.state.dimensions.height
 
-		if (height > width) {
-			height = width
-		}
+    if (height > width) {
+      height = width
+    }
 
-		const surface = (
-		  <Surface width = { width } height = { height } className={'canvas'}>
-		  </Surface>
+    const surface = (
+      <Surface width = { width } height = { height } className={'canvas'}>
+      </Surface>
     )
 		
     return surface
-	}
+  }
 }
 
 const mapStateToProps = (state) => {

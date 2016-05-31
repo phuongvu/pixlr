@@ -1,26 +1,24 @@
 var express = require('express')
   , cookieParser = require('cookie-parser')
   , bodyParser = require('body-parser')
-	, app = express()
-	, server = require('http').createServer(app)
-	, io = require('socket.io')(server)
+  , app = express()
+  , server = require('http').createServer(app)
+  , io = require('socket.io')(server)
   , debug = require('debug')('admin:app')
   , morgan = require('morgan')
   , path = require('path')
   , redis = require('redis')
-  , Promise = require('bluebird')
   , _ = require('lodash')
   , utils = require('./lib/utils')
   , LedMatrix = require('node-rpi-rgb-led-matrix')
-  , fs = require('fs')
   , pngparse = require('pngparse')
   ;
 
 const webpack = require('webpack')
-      , webpackMiddleware = require('webpack-dev-middleware')
-      , webpackHotMiddleware = require('webpack-hot-middleware')
-      , config = require('./webpack.config.js')
-      ;
+  , webpackMiddleware = require('webpack-dev-middleware')
+  , webpackHotMiddleware = require('webpack-hot-middleware')
+  , config = require('./webpack.config.js')
+  ;
 
 const isDeveloping = process.env.NODE_ENV === 'development';
 const port = 80;
@@ -33,14 +31,14 @@ var matrix = new LedMatrix(32, 4, 1, 100, true);
 
 pngparse.parseFile(path.join(__dirname,'icon.png'), function(err, data) {
   if(err) {
-    console.log("err", err);
+    debug("err", err);
     throw err
   }
   matrix.setImageBuffer(data.data, 64, 64);
   matrix.draw();
-})
+});
 
-var setMarker = function() {
+function setMarker() {
   var rgb = utils.hexToRgbConverter('#f44336');
   for (var y = 0; y <= 2; y++) {
     for (var x = 0; x <= 2 - y; x++) {
@@ -83,7 +81,7 @@ function draw(coord) {
   debug('coords', coord);
 
   var x = coord.x,
-      y = coord.y
+      y = coord.y,
       color = coord.color;
 
   var rgb = utils.hexToRgbConverter(coord.color)
@@ -130,7 +128,7 @@ io.on('connection', function(socket) {
       _.map(p.coords, function(coord) {
         draw(coord);
       });
-    })
+    });
     //set marker
     setMarker();
 
@@ -165,7 +163,7 @@ io.on('connection', function(socket) {
       _.map(p.coords, function(coord) {
         draw(coord);
       });
-    })
+    });
     //set marker
     setMarker();
 

@@ -14,8 +14,8 @@ let socket = io.connect();
 export default class App extends Component {
 
 	constructor() {
-    super()
-  }
+		super()
+	}
 
 	render() {
 		return (
@@ -49,4 +49,3 @@ export default class App extends Component {
 		)
 	}
 }
-

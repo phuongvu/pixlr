@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { words } from '../constants/Words'
 
 const getRandomIntInclusive = (min, max) => {
-  return Math.floor(_.random(min, max))
+	return Math.floor(_.random(min, max))
 }
 
 const randomWord = () => {

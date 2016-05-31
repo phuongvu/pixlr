@@ -6,8 +6,8 @@ const PictionaryWords = ({ onclick, word }) => (
 	<div className="pictionary">
 		<span className="pictionary__refresh">
 			<IconButton touch={true} onClick={onclick} >
-      	<ActionCached color={'#FAFAFA'} />
-  		</IconButton>
+				<ActionCached color={'#FAFAFA'} />
+			</IconButton>
 		</span>
 		<span className="pictionary__title">
 			Suggested topic:
@@ -15,7 +15,7 @@ const PictionaryWords = ({ onclick, word }) => (
 		<span className="pictionary__words">
 			{word}
 		</span>
-  </div>
+	</div>
 );
 
 PictionaryWords.propTypes = {
